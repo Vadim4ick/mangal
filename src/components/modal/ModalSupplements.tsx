@@ -90,7 +90,10 @@ const ModalSupplements = () => {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="border-b border-[#EBEBEB] pb-3" asChild>
+          <DialogTitle
+            className="mobile:border-b mobile:border-[#EBEBEB] mobile:pb-3"
+            asChild
+          >
             <div className="flex gap-3">
               <div className="relative min-h-[106px] w-[162px] max-mobile:h-[220px] max-mobile:w-full">
                 <Image
@@ -116,12 +119,21 @@ const ModalSupplements = () => {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="pt-3">
-          <h4 className="pb-3 text-[14px] font-[700] leading-[19px] text-[#363636]">
+        <div className="h-[316px] overflow-scroll max-mobile:h-[220px] max-mobile:pt-3">
+          <div className="flex flex-col gap-0.5 max-mobile:border-b max-mobile:border-[#EBEBEB] max-mobile:pb-3 mobile:hidden">
+            <h2 className="text-[14px] font-[700] leading-[19px] text-[#363636]">
+              {item.name}
+            </h2>
+            <span className="text-[12px] font-[500] leading-[16.8px] text-[#696969]">
+              {item.itemSizes[0].portionWeightGrams} г.
+            </span>
+          </div>
+
+          <h4 className="pb-3 pt-3 text-[14px] font-[700] leading-[19px] text-[#363636]">
             Дополнительно:
           </h4>
 
-          <div className="flex h-[285px] flex-col gap-[6px] overflow-scroll">
+          <div className="flex flex-col gap-[6px]">
             {item.itemSizes[0].itemModifierGroups[0].items.map((modifier) => {
               const modifiers = selectedModifiers.find(
                 (mod) => mod.id === modifier.itemId,
@@ -134,7 +146,7 @@ const ModalSupplements = () => {
                 >
                   <div
                     className={clsx(
-                      `flex w-full items-center justify-between rounded-[6px] border bg-[#F3F3F3] pb-[8px] pl-[13px] pr-2 pt-[7px] text-[14px] font-[700] leading-[19px]`,
+                      `flex w-full items-center justify-between gap-2 rounded-[6px] border bg-[#F3F3F3] pb-[8px] pl-[13px] pr-2 pt-[7px] text-[14px] font-[700] leading-[19px]`,
                       {
                         "border-[#FFAF10]": modifiers,
                         "border-transparent": !modifiers,
