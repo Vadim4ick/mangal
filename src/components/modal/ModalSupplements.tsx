@@ -4,13 +4,13 @@ import { Button } from "@/shared/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog";
 import { useBasketStore } from "@/store/basket";
 import { useModalSupplements } from "@/store/modalSupplements";
+import clsx from "clsx";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ const ModalSupplements = () => {
   const { isOpen, setIsOpen, item } = useModalSupplements();
   const { addToBasket } = useBasketStore();
   const [selectedModifiers, setSelectedModifiers] = useState<
-    { id: string; price: number }[]
+    { id: string; price: number; name: string }[]
   >([]);
 
   if (!item) return null;
@@ -26,6 +26,7 @@ const ModalSupplements = () => {
   const handleModifierToggle = (modifier: {
     itemId: string;
     prices: { price: number }[];
+    name: string;
   }) => {
     setSelectedModifiers((prev) => {
       const exists = prev.find((mod) => mod.id === modifier.itemId);
@@ -36,7 +37,11 @@ const ModalSupplements = () => {
         // Добавляем модификатор
         return [
           ...prev,
-          { id: modifier.itemId, price: modifier.prices[0].price },
+          {
+            id: modifier.itemId,
+            price: modifier.prices[0].price,
+            name: modifier.name,
+          },
         ];
       }
     });
@@ -69,6 +74,12 @@ const ModalSupplements = () => {
     }, 300);
   };
 
+  // ${
+  //   selectedModifiers.find((mod) => mod.id === modifier.itemId)
+  //     ? "bg-[#FFAF10]"
+  //     : "bg-[#F3F3F3]"
+  // }
+
   return (
     <Dialog
       open={isOpen}
@@ -81,7 +92,7 @@ const ModalSupplements = () => {
         <DialogHeader>
           <DialogTitle className="border-b border-[#EBEBEB] pb-3" asChild>
             <div className="flex gap-3">
-              <div className="relative min-h-[106px] w-[162px]">
+              <div className="relative min-h-[106px] w-[162px] max-mobile:h-[220px] max-mobile:w-full">
                 <Image
                   src={
                     item.itemSizes[0].buttonImageCroppedUrl?.["475x250-webp"]
@@ -93,7 +104,7 @@ const ModalSupplements = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-0.5">
+              <div className="flex flex-col gap-0.5 max-mobile:hidden">
                 <h2 className="text-[14px] font-[700] leading-[19px] text-[#363636]">
                   {item.name}
                 </h2>
@@ -105,47 +116,54 @@ const ModalSupplements = () => {
           </DialogTitle>
         </DialogHeader>
 
-        <DialogDescription className="pt-3">
+        <div className="pt-3">
           <h4 className="pb-3 text-[14px] font-[700] leading-[19px] text-[#363636]">
             Дополнительно:
           </h4>
 
           <div className="flex h-[285px] flex-col gap-[6px] overflow-scroll">
-            {item.itemSizes[0].itemModifierGroups[0].items.map((modifier) => (
-              <div
-                key={modifier.itemId}
-                className="flex items-center justify-between gap-[6px]"
-              >
+            {item.itemSizes[0].itemModifierGroups[0].items.map((modifier) => {
+              const modifiers = selectedModifiers.find(
+                (mod) => mod.id === modifier.itemId,
+              );
+
+              return (
                 <div
-                  className={`flex w-full items-center justify-between rounded-[6px] ${
-                    selectedModifiers.find((mod) => mod.id === modifier.itemId)
-                      ? "bg-[#FFAF10]"
-                      : "bg-[#F3F3F3]"
-                  } pb-[9px] pl-[13px] pr-2 pt-2 text-[14px] font-[700] leading-[19px]`}
+                  key={modifier.itemId}
+                  className="flex items-center justify-between gap-[6px]"
                 >
-                  <p className="text-[#363636]">{modifier.name}</p>
+                  <div
+                    className={clsx(
+                      `flex w-full items-center justify-between rounded-[6px] border bg-[#F3F3F3] pb-[8px] pl-[13px] pr-2 pt-[7px] text-[14px] font-[700] leading-[19px]`,
+                      {
+                        "border-[#FFAF10]": modifiers,
+                        "border-transparent": !modifiers,
+                      },
+                    )}
+                  >
+                    <p className="text-[#363636]">{modifier.name}</p>
 
-                  <span className="text-[#D4910B]">
-                    + {modifier.prices[0].price}р.
-                  </span>
+                    <span className="text-[#D4910B]">
+                      + {modifier.prices[0].price}р.
+                    </span>
+                  </div>
+
+                  <button
+                    className={clsx(
+                      "flex size-[36px] shrink-0 items-center justify-center rounded-[6px] bg-[#F3F3F3]",
+                      {
+                        "bg-[#FFAF10]": modifiers,
+                      },
+                    )}
+                    onClick={() => handleModifierToggle(modifier)}
+                  >
+                    {modifiers ? <Check /> : <Pluse />}
+                  </button>
                 </div>
-
-                <button
-                  className="flex size-[36px] items-center justify-center rounded-[6px] bg-[#F3F3F3]"
-                  onClick={() => handleModifierToggle(modifier)}
-                >
-                  {selectedModifiers.find(
-                    (mod) => mod.id === modifier.itemId,
-                  ) ? (
-                    <Check />
-                  ) : (
-                    <Pluse />
-                  )}
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </DialogDescription>
+        </div>
 
         <DialogFooter className="my-4">
           <Button className="py-[17px]" onClick={handleAddToBasket}>

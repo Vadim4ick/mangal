@@ -4,7 +4,7 @@ import { Item } from "./catalog";
 
 export interface Modifier {
   id: string;
-  // name: string;
+  name: string;
   price: number;
 }
 
