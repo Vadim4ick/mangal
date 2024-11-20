@@ -80,11 +80,21 @@ const BasketItem = ({
   const { increaseCount, decreaseCount, removeFromBasket } = useBasketStore();
 
   const inc = () => {
-    increaseCount(el.item);
+    increaseCount({
+      item: el.item,
+      modifiers: el.modifiers,
+      count: el.count,
+      totalPrice: el.totalPrice,
+    });
   };
 
   const dec = () => {
-    decreaseCount(el.item);
+    decreaseCount({
+      item: el.item,
+      modifiers: el.modifiers,
+      count: el.count,
+      totalPrice: el.totalPrice,
+    });
   };
   return (
     <article className="flex justify-between gap-[21px] max-mobile:flex-col max-mobile:gap-[13px]">
@@ -110,6 +120,9 @@ const BasketItem = ({
           <div className="flex w-full max-w-[310px] flex-col gap-[4px]">
             <span className="line-clamp-2 text-[14px] font-[700] leading-[19px] text-[#363636]">
               {el.item.name}
+            </span>
+            <span className="line-clamp-2 text-[14px] font-[700] leading-[19px] text-[#363636]">
+              {/* {el.modifiers.map((el) => el.name).join(", ")} */}
             </span>
 
             {/* {el.item.description && (
@@ -151,7 +164,14 @@ const BasketItem = ({
         <div className="flex gap-[9px]">
           <button
             type="button"
-            onClick={() => removeFromBasket(el.item)}
+            onClick={() =>
+              removeFromBasket({
+                item: el.item,
+                modifiers: el.modifiers,
+                count: el.count,
+                totalPrice: el.totalPrice,
+              })
+            }
             className="h-fit rounded-[6px] bg-[#FFE5E5] px-[17px] py-[7px] max-mobile:px-[7px]"
           >
             <Close />
