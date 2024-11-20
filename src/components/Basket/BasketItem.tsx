@@ -121,9 +121,11 @@ const BasketItem = ({
             <span className="line-clamp-2 text-[14px] font-[700] leading-[19px] text-[#363636]">
               {el.item.name}
             </span>
-            <span className="line-clamp-2 text-[14px] font-[700] leading-[19px] text-[#363636]">
-              {/* {el.modifiers.map((el) => el.name).join(", ")} */}
-            </span>
+            {el.modifiers.length > 0 && (
+              <span className="text-[12px] font-[500] leading-[16px] text-[#696969]">
+                Добавки: {el.modifiers.map((el) => el.name).join(", ")}
+              </span>
+            )}
 
             {/* {el.item.description && (
               <p className="line-clamp-2 text-[12px] font-[500] leading-[16px] text-[#696969]">
