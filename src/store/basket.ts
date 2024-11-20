@@ -2,25 +2,31 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Item } from "./catalog";
 
+export interface Modifier {
+  id: string;
+  // name: string;
+  price: number;
+}
+
 export interface BasketItem {
   count: number;
   item: Item;
+  modifiers: Modifier[];
   totalPrice: number;
 }
 
 interface State {
-  isDelivery: boolean;
   basket: BasketItem[];
   totalCount: number;
-
   totalPrice: number;
 
-  addToBasket: (item: Item) => void;
-  increaseCount: (item: Item) => void;
-  decreaseCount: (item: Item) => void;
-  removeFromBasket: (item: Item) => void;
+  addToBasket: (basketItem: BasketItem) => void;
+  increaseCount: (basketItem: BasketItem) => void;
+  decreaseCount: (basketItem: BasketItem) => void;
+  removeFromBasket: (basketItem: BasketItem) => void;
   removeAllFromBasket: () => void;
 
+  isDelivery: boolean;
   setDelivery: (val: boolean) => void;
 }
 
@@ -40,32 +46,31 @@ export const useBasketStore = create<State>()(
 
       setDelivery: (val: boolean) => set({ isDelivery: val }),
 
-      // Добавление товара в корзину
-      addToBasket: (item: Item) =>
+      addToBasket: (basketItem: BasketItem) =>
         set((state) => {
           const existingItem = state.basket.find(
-            (basketItem) => basketItem.item.itemId === item.itemId,
+            (item) =>
+              item.item.itemId === basketItem.item.itemId &&
+              JSON.stringify(item.modifiers) ===
+                JSON.stringify(basketItem.modifiers),
           );
 
           let updatedBasket;
 
           if (existingItem) {
-            const newCount = existingItem.count + 1;
-
-            updatedBasket = state.basket.map((basketItem) =>
-              basketItem.item.itemId === item.itemId
+            updatedBasket = state.basket.map((item) =>
+              item.item.itemId === basketItem.item.itemId &&
+              JSON.stringify(item.modifiers) ===
+                JSON.stringify(basketItem.modifiers)
                 ? {
-                    ...basketItem,
-                    count: newCount,
-                    totalPrice: item.itemSizes[0].prices[0].price * newCount,
+                    ...item,
+                    count: item.count + 1,
+                    totalPrice: item.totalPrice + basketItem.totalPrice,
                   }
-                : basketItem,
+                : item,
             );
           } else {
-            updatedBasket = [
-              ...state.basket,
-              { item, count: 1, totalPrice: item.itemSizes[0].prices[0].price },
-            ];
+            updatedBasket = [...state.basket, basketItem];
           }
 
           return {
@@ -75,56 +80,46 @@ export const useBasketStore = create<State>()(
           };
         }),
 
-      // Увеличение количества товара в корзине
-      increaseCount: (item: Item) =>
+      // Увеличение количества
+      increaseCount: (basketItem: BasketItem) =>
         set((state) => {
-          const updatedBasket = state.basket.map((basketItem) => {
-            if (basketItem.item.itemId === item.itemId) {
-              const newCount = basketItem.count + 1;
-
-              return {
-                ...basketItem,
-                count: newCount,
-                totalPrice: item.itemSizes[0].prices[0].price * newCount,
-              };
-            } else {
-              return basketItem;
-            }
-          });
-
-          return {
-            basket: updatedBasket,
-            totalCount: calculateTotalCount(updatedBasket),
-            totalPrice: calculateTotalPrice(updatedBasket),
-          };
-        }),
-
-      // Уменьшение количества товара в корзине
-      decreaseCount: (item: Item) =>
-        set((state) => {
-          const existingItem = state.basket.find(
-            (basketItem) => basketItem.item.itemId === item.itemId,
+          const updatedBasket = state.basket.map((item) =>
+            item.item.itemId === basketItem.item.itemId &&
+            JSON.stringify(item.modifiers) ===
+              JSON.stringify(basketItem.modifiers)
+              ? {
+                  ...item,
+                  count: item.count + 1,
+                  totalPrice:
+                    item.totalPrice + basketItem.totalPrice / item.count,
+                }
+              : item,
           );
 
-          let updatedBasket;
+          return {
+            basket: updatedBasket,
+            totalCount: calculateTotalCount(updatedBasket),
+            totalPrice: calculateTotalPrice(updatedBasket),
+          };
+        }),
 
-          if (existingItem && existingItem.count > 1) {
-            const newCount = existingItem.count - 1;
-
-            updatedBasket = state.basket.map((basketItem) =>
-              basketItem.item.itemId === item.itemId
+      // Уменьшение количества
+      decreaseCount: (basketItem: BasketItem) =>
+        set((state) => {
+          const updatedBasket = state.basket
+            .map((item) =>
+              item.item.itemId === basketItem.item.itemId &&
+              JSON.stringify(item.modifiers) ===
+                JSON.stringify(basketItem.modifiers)
                 ? {
-                    ...basketItem,
-                    count: newCount,
-                    totalPrice: item.itemSizes[0].prices[0].price * newCount,
+                    ...item,
+                    count: item.count - 1,
+                    totalPrice:
+                      item.totalPrice - basketItem.totalPrice / item.count,
                   }
-                : basketItem,
-            );
-          } else {
-            updatedBasket = state.basket.filter(
-              (basketItem) => basketItem.item.itemId !== item.itemId,
-            );
-          }
+                : item,
+            )
+            .filter((item) => item.count > 0);
 
           return {
             basket: updatedBasket,
@@ -133,11 +128,16 @@ export const useBasketStore = create<State>()(
           };
         }),
 
-      // Удаление товара из корзины
-      removeFromBasket: (item: Item) =>
+      // Удаление товара
+      removeFromBasket: (basketItem: BasketItem) =>
         set((state) => {
           const updatedBasket = state.basket.filter(
-            (basketItem) => basketItem.item.itemId !== item.itemId,
+            (item) =>
+              !(
+                item.item.itemId === basketItem.item.itemId &&
+                JSON.stringify(item.modifiers) ===
+                  JSON.stringify(basketItem.modifiers)
+              ),
           );
 
           return {
@@ -147,6 +147,7 @@ export const useBasketStore = create<State>()(
           };
         }),
 
+      // Очистка корзины
       removeAllFromBasket: () =>
         set({ basket: [], totalCount: 0, totalPrice: 0 }),
     }),

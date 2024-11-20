@@ -68,7 +68,10 @@ const CatalogItem = ({ item }: { item: Item }) => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-[18px] font-[700] leading-[25px] text-[#363636]">
-              {formatPrice(item.itemSizes[0].prices[0].price)} руб.
+              {!findItemToBasket
+                ? formatPrice(item.itemSizes[0].prices[0].price)
+                : formatPrice(findItemToBasket.totalPrice)}{" "}
+              руб.
             </span>
 
             {/* {item.sale && (
@@ -85,7 +88,12 @@ const CatalogItem = ({ item }: { item: Item }) => {
                 if (item.itemSizes[0].itemModifierGroups.length > 0) {
                   openModal();
                 } else {
-                  addToBasket(item);
+                  addToBasket({
+                    item,
+                    count: 1,
+                    modifiers: [],
+                    totalPrice: item.itemSizes[0].prices[0].price,
+                  });
                 }
               }}
               className="h-[44px] max-w-[140px] max-mobile:max-w-[170px]"
@@ -97,7 +105,14 @@ const CatalogItem = ({ item }: { item: Item }) => {
           {findItemToBasket && (
             <div className="flex items-center gap-[12px]">
               <button
-                onClick={() => decreaseCount(item)}
+                onClick={() =>
+                  decreaseCount({
+                    item,
+                    modifiers: findItemToBasket.modifiers,
+                    count: findItemToBasket.count,
+                    totalPrice: findItemToBasket.totalPrice,
+                  })
+                }
                 className="flex size-[36px] items-center justify-center rounded-[10px] bg-[#E1E1E1] transition-colors [@media(any-hover:hover){&:hover}]:bg-[#C7C7C7]"
               >
                 <Minuse />
@@ -108,7 +123,14 @@ const CatalogItem = ({ item }: { item: Item }) => {
               </span>
 
               <button
-                onClick={() => increaseCount(item)}
+                onClick={() =>
+                  increaseCount({
+                    item,
+                    modifiers: findItemToBasket.modifiers,
+                    count: findItemToBasket.count,
+                    totalPrice: findItemToBasket.totalPrice,
+                  })
+                }
                 className="flex size-[36px] items-center justify-center rounded-[10px] bg-[#E1E1E1] transition-colors [@media(any-hover:hover){&:hover}]:bg-[#C7C7C7]"
               >
                 <Pluse />
