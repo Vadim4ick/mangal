@@ -185,8 +185,7 @@ const OrdersPage = () => {
                               <div className="flex w-full flex-col items-center gap-[14px] max-tablet:gap-[22px]">
                                 <div className="w-fit rounded-[12px] bg-[#F3F3F3] px-[28px] py-[23px]">
                                   <p className="text-center text-[16px] font-[700] leading-[22px] text-[#363636]">
-                                    Краснодар, ул. 40 лет победы, д.12, ”Царь
-                                    Шампур”
+                                    Краснодар, ул. Карякина, 7 ”Царь Мангал”
                                   </p>
                                 </div>
 
