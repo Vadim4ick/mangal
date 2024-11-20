@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useStoreCatalog } from "@/store/catalog";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useHeaderStore } from "@/store/header";
+import { ModalSupplements } from "./modal/ModalSupplements";
 
 const fetchCatalog = async () => {
   const response = await fetch("/api/getMenuId", {
@@ -74,6 +75,8 @@ const CatalogPage = () => {
           )}
         </div>
       </Container>
+
+      <ModalSupplements />
     </section>
   );
 };
