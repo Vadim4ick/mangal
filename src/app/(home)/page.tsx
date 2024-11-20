@@ -4,6 +4,7 @@ import { DeliveryIcon } from "@/shared/icons/DeliveryIcon";
 import { PaymentIcon } from "@/shared/icons/PaymentIcon";
 import { TimeIcon } from "@/shared/icons/TimeIcon";
 import { Container } from "@/shared/ui/container";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -104,7 +105,14 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="h-[457px] w-full max-w-[489px] shrink-0 rounded-[12px] bg-[#EDEDED] max-mobile:h-[335px]"></div>
+              <div className="relative h-[457px] w-full max-w-[489px] shrink-0 max-mobile:h-[335px]">
+                <Image
+                  src={"/2.png"}
+                  alt="about"
+                  fill
+                  className="rounded-[12px] object-cover"
+                />
+              </div>
             </div>
           </div>
         </Container>
