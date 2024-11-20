@@ -6,22 +6,29 @@ import { formatPrice } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { useBasketStore } from "@/store/basket";
 import { Item } from "@/store/catalog";
+import { useModalSupplements } from "@/store/modalSupplements";
 import Image from "next/image";
 
 const CatalogItem = ({ item }: { item: Item }) => {
   const { addToBasket, basket, increaseCount, decreaseCount } =
     useBasketStore();
 
+  const { setIsOpen, setItem } = useModalSupplements();
+
   const findItemToBasket = basket.find(
     (basketItem) => basketItem.item.itemId === item.itemId,
   );
+
+  const openModal = () => {
+    setIsOpen(true);
+    setItem(item);
+  };
 
   return (
     <article className="flex h-[360px] flex-col gap-[10px] max-mobile:h-[332px]">
       {item.itemSizes[0].buttonImageCroppedUrl && (
         <div className="relative min-h-[182px]">
           <Image
-            // src={"/1.png"}
             src={
               item.itemSizes[0].buttonImageCroppedUrl?.["475x250-webp"]
                 .url as string
@@ -74,7 +81,13 @@ const CatalogItem = ({ item }: { item: Item }) => {
 
           {!findItemToBasket && (
             <Button
-              onClick={() => addToBasket(item)}
+              onClick={() => {
+                if (item.itemSizes[0].itemModifierGroups.length > 0) {
+                  openModal();
+                } else {
+                  addToBasket(item);
+                }
+              }}
               className="h-[44px] max-w-[140px] max-mobile:max-w-[170px]"
             >
               Добавить
