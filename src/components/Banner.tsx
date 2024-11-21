@@ -66,7 +66,7 @@ const Banner = () => {
               className="w-full"
             >
               <CarouselContent>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 1 }).map((_, index) => (
                   <CarouselItem key={index}>
                     <div className="relative h-[400px] w-full">
                       <Image
@@ -88,6 +88,15 @@ const Banner = () => {
                         </div>
 
                         <Button
+                          onClick={() => {
+                            const catalogElement =
+                              document.getElementById("catalog");
+                            if (catalogElement) {
+                              catalogElement.scrollIntoView({
+                                behavior: "smooth",
+                              });
+                            }
+                          }}
                           addonRight={<ArrowBottom />}
                           className="h-[50px] w-[184px] gap-[10px] text-[14px]"
                         >

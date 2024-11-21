@@ -35,7 +35,7 @@ const CatalogPage = () => {
   }, [setIsLoading, setItemCategories, setNavbar]);
 
   return (
-    <section>
+    <section id="catalog">
       <Container>
         <div className="flex flex-col justify-between gap-[52px] max-mobile:gap-[48px]">
           {isLoading ? (
