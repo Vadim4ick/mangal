@@ -111,6 +111,17 @@ const Footer = () => {
             {isMobile && <Policy />}
           </div>
         </div>
+
+        <div className="flex items-center justify-center gap-[11px] pt-[21px] text-[12px] leading-[16px] text-[#B6B6B6] max-mobile:flex-col">
+          <div className="flex items-center gap-[11px]">
+            <p>ИП Казаев Артём Вадимович</p>
+            <p>БИК 040349602</p>
+          </div>
+          <div className="flex items-center gap-[11px]">
+            <p>ОГРНИП 318237500432899</p>
+            <p>ИНН 233913534972</p>
+          </div>
+        </div>
       </Container>
     </footer>
   );
