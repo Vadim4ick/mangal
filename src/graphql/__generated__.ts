@@ -242,6 +242,7 @@ export type Count_Functions = {
 export type Create_OrderItem_Input = {
   readonly count: InputMaybe<Scalars['Int']['input']>;
   readonly id: InputMaybe<Scalars['ID']['input']>;
+  readonly modificators: InputMaybe<Scalars['String']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
   readonly orderId: InputMaybe<Create_Orders_Input>;
   readonly totalPrice: InputMaybe<Scalars['Int']['input']>;
@@ -278,6 +279,7 @@ export type OrderItem = {
   readonly __typename?: 'orderItem';
   readonly count: Maybe<Scalars['Int']['output']>;
   readonly id: Scalars['ID']['output'];
+  readonly modificators: Maybe<Scalars['String']['output']>;
   readonly name: Maybe<Scalars['String']['output']>;
   readonly orderId: Maybe<Orders>;
   readonly totalPrice: Maybe<Scalars['Int']['output']>;
@@ -311,6 +313,7 @@ export type OrderItem_Aggregated_Count = {
   readonly __typename?: 'orderItem_aggregated_count';
   readonly count: Maybe<Scalars['Int']['output']>;
   readonly id: Maybe<Scalars['Int']['output']>;
+  readonly modificators: Maybe<Scalars['Int']['output']>;
   readonly name: Maybe<Scalars['Int']['output']>;
   readonly orderId: Maybe<Scalars['Int']['output']>;
   readonly totalPrice: Maybe<Scalars['Int']['output']>;
@@ -329,6 +332,7 @@ export type OrderItem_Filter = {
   readonly _or: InputMaybe<ReadonlyArray<InputMaybe<OrderItem_Filter>>>;
   readonly count: InputMaybe<Number_Filter_Operators>;
   readonly id: InputMaybe<Number_Filter_Operators>;
+  readonly modificators: InputMaybe<String_Filter_Operators>;
   readonly name: InputMaybe<String_Filter_Operators>;
   readonly orderId: InputMaybe<Orders_Filter>;
   readonly totalPrice: InputMaybe<Number_Filter_Operators>;
@@ -445,6 +449,7 @@ export type String_Filter_Operators = {
 export type Update_OrderItem_Input = {
   readonly count: InputMaybe<Scalars['Int']['input']>;
   readonly id: InputMaybe<Scalars['ID']['input']>;
+  readonly modificators: InputMaybe<Scalars['String']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
   readonly orderId: InputMaybe<Update_Orders_Input>;
   readonly totalPrice: InputMaybe<Scalars['Int']['input']>;
@@ -466,6 +471,7 @@ export type Version_OrderItem = {
   readonly __typename?: 'version_orderItem';
   readonly count: Maybe<Scalars['Int']['output']>;
   readonly id: Maybe<Scalars['ID']['output']>;
+  readonly modificators: Maybe<Scalars['String']['output']>;
   readonly name: Maybe<Scalars['String']['output']>;
   readonly orderId: Maybe<Scalars['JSON']['output']>;
   readonly totalPrice: Maybe<Scalars['Int']['output']>;
@@ -501,18 +507,19 @@ export type CreateOrderItemItemMutationVariables = Exact<{
   count: InputMaybe<Scalars['Int']['input']>;
   totalPrice: InputMaybe<Scalars['Int']['input']>;
   name: InputMaybe<Scalars['String']['input']>;
+  modificators: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
 }>;
 
 
-export type CreateOrderItemItemMutation = { readonly __typename?: 'Mutation', readonly create_orderItem_item: { readonly __typename?: 'orderItem', readonly count: number, readonly id: string, readonly name: string, readonly totalPrice: number } };
+export type CreateOrderItemItemMutation = { readonly __typename?: 'Mutation', readonly create_orderItem_item: { readonly __typename?: 'orderItem', readonly count: number, readonly id: string, readonly name: string, readonly modificators: string, readonly totalPrice: number } };
 
 export type GetOrderByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders_by_id: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string, readonly basket: ReadonlyArray<{ readonly __typename?: 'orderItem', readonly count: number, readonly name: string, readonly totalPrice: number }> } };
+export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders_by_id: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string, readonly basket: ReadonlyArray<{ readonly __typename?: 'orderItem', readonly count: number, readonly name: string, readonly totalPrice: number, readonly modificators: string }> } };
 
 
 export const CreateOrderItemDocument = gql`
@@ -532,13 +539,14 @@ export const CreateOrderItemDocument = gql`
 }
     `;
 export const CreateOrderItemItemDocument = gql`
-    mutation CreateOrderItemItem($count: Int, $totalPrice: Int, $name: String, $id: ID!) {
+    mutation CreateOrderItemItem($count: Int, $totalPrice: Int, $name: String, $modificators: String, $id: ID!) {
   create_orderItem_item(
-    data: {count: $count, name: $name, totalPrice: $totalPrice, orderId: {id: $id}}
+    data: {count: $count, name: $name, totalPrice: $totalPrice, orderId: {id: $id}, modificators: $modificators}
   ) {
     count
     id
     name
+    modificators
     totalPrice
   }
 }
@@ -556,6 +564,7 @@ export const GetOrderByIdDocument = gql`
       count
       name
       totalPrice
+      modificators
     }
     address
     comment

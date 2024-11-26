@@ -2,6 +2,7 @@ mutation CreateOrderItemItem(
   $count: Int
   $totalPrice: Int
   $name: String
+  $modificators: String
   $id: ID!
 ) {
   create_orderItem_item(
@@ -10,11 +11,13 @@ mutation CreateOrderItemItem(
       name: $name
       totalPrice: $totalPrice
       orderId: { id: $id }
+      modificators: $modificators
     }
   ) {
     count
     id
     name
+    modificators
     totalPrice
   }
 }
