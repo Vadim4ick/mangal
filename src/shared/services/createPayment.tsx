@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { gql } from "@/graphql/client";
+import { BasketItem } from "@/store/basket";
 import axios from "axios";
 
 export interface PaymentDetails {
@@ -14,7 +15,7 @@ export interface PaymentDetails {
 interface Props {
   totalPrice: number;
   isDelivery: boolean;
-  // basket: any[];
+  basket: BasketItem[];
   email: string;
   name: string;
   phone: string;
@@ -45,8 +46,16 @@ export const makePaymentFx = async ({
 };
 
 export const processOrder = async (props: Props) => {
-  const { address, comment, email, isDelivery, name, phone, totalPrice } =
-    props;
+  const {
+    address,
+    comment,
+    email,
+    isDelivery,
+    name,
+    basket,
+    phone,
+    totalPrice,
+  } = props;
 
   try {
     // // Создание заказа
@@ -61,15 +70,14 @@ export const processOrder = async (props: Props) => {
     });
 
     // // Добавление товаров в заказ
-    // for (const item of basket) {
-    //   await gql.CreateOrderItem({
-    //     count: item.count,
-    //     size: item.size,
-    //     good_id: Number(item.id),
-    //     order_id: orderId.create_orders_item.id,
-    //     discount: item.discount,
-    //   });
-    // }
+    for (const item of basket) {
+      await gql.CreateOrderItemItem({
+        count: item.count,
+        totalPrice: item.totalPrice,
+        name: item.item.name,
+        id: task.create_orders_item.id,
+      });
+    }
 
     return { success: true, orderId: task.create_orders_item.id };
   } catch (error) {

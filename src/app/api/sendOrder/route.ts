@@ -32,9 +32,9 @@ export async function POST(request: Request) {
     ${orderItem.orders_by_id.isDelivery ? `- *Адрес*: ${orderItem.orders_by_id.address}` : ""}
     - *Комментарий*: ${orderItem.orders_by_id.comment || "Нет"}
     - *Общая стоимость*: ${orderItem.orders_by_id.totalPrice}₽
+    - *Корзина*:
+    ${orderItem.orders_by_id.basket?.map((item) => `  • ${item.name} x${item.count}`).join("\n")}
     `;
-    // - *Корзина*:
-    // ${basket?.map((item) => `  • ${item.item.name} x${item.count}`).join("\n")}
 
     // // Отправляем сообщение через Telegram API
     const telegramResponse = await fetch(
