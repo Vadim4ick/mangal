@@ -19,8 +19,9 @@ interface OrderData {
 }
 
 export async function POST(request: Request) {
+  const data = await request.json();
   try {
-    const data: OrderData = await request.json();
+    // const data: OrderData = await request.json();
 
     const {
       email,
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
       totalPrice,
       isDelivery,
       basket,
-    } = data;
+    } = data?.object.metadata;
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -40,54 +41,56 @@ export async function POST(request: Request) {
       console.error("TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не установлены");
 
       return NextResponse.json(
-        { message: "Server configuration error" },
+        { message: "TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не установлены" },
         { status: 500 },
       );
     }
 
+    // const parseData = JSON.parse(basket);
+
     // Форматируем сообщение для Telegram
     const message = `
-📦 *Новый заказ*:
-- *Имя*: ${name}
-- *Email*: ${email}
-- *Телефон*: ${phone}
-- *Способ доставки*: ${isDelivery ? "Доставка" : "Самовывоз"}
-${isDelivery ? `- *Адрес*: ${address}` : ""}
-- *Комментарий*: ${comment || "Нет"}
-- *Общая стоимость*: ${totalPrice}₽
-- *Корзина*:
-${basket.map((item) => `  • ${item.item.name} x${item.count}`).join("\n")}
-    `;
+    📦 *Новый заказ*:
+    - *Имя*: ${name}
+    - *Email*: ${email}
+    - *Телефон*: ${phone}
+    - *Способ доставки*: ${isDelivery === "true" ? "Доставка" : "Самовывоз"}
+    ${isDelivery === "true" ? `- *Адрес*: ${address}` : ""}
+    - *Комментарий*: ${comment || "Нет"}
+    - *Общая стоимость*: ${totalPrice}₽
+    - *Корзина*:
+    ${basket?.map((item) => `  • ${item.item.name} x${item.count}`).join("\n")}
+        `;
 
     // Отправляем сообщение через Telegram API
-    // const telegramResponse = await fetch(
-    //   `https://api.telegram.org/bot${token}/sendMessage`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       chat_id: chatId,
-    //       text: message,
-    //       parse_mode: "Markdown",
-    //     }),
-    //   },
-    // );
+    const telegramResponse = await fetch(
+      `https://api.telegram.org/bot${token}/sendMessage`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown",
+        }),
+      },
+    );
 
-    // const telegramData = await telegramResponse.json();
+    const telegramData = await telegramResponse.json();
 
-    // if (!telegramData.ok) {
-    //   console.error("Ошибка при отправке сообщения в Telegram:", telegramData);
-    //   return NextResponse.json(
-    //     { message: "Failed to send message to Telegram" },
-    //     { status: 500 },
-    //   );
-    // }
+    if (!telegramData.ok) {
+      console.error("Ошибка при отправке сообщения в Telegram:", telegramData);
+      return NextResponse.json(
+        { message: "Failed to send message to Telegram" },
+        { status: 500 },
+      );
+    }
 
     // Возвращаем успешный ответ
     return NextResponse.json(
-      { message: "Заказ успешно отправлен!", data: message },
+      { message: "Заказ успешно отправлен!", data: "test" },
       { status: 200 },
     );
   } catch (error) {
