@@ -139,8 +139,6 @@ const OrdersPage = () => {
               {(FormikState) => {
                 const errors = FormikState.errors;
 
-                console.log("errors", errors);
-
                 return (
                   <Form className="card-body">
                     <div className="grid grid-cols-[1fr_360px] gap-[28px] max-desktop1250:gap-[10px] max-tablet:grid-cols-1 max-tablet:gap-4">
@@ -155,6 +153,7 @@ const OrdersPage = () => {
                           onValueChange={(value) =>
                             setDelivery(value === "delivery")
                           }
+                          value={isDelivery ? "delivery" : "pickup"}
                           defaultValue="delivery"
                           className="flex flex-col gap-[28px] max-mobile:gap-4"
                         >

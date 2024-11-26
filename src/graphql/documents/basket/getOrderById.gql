@@ -10,7 +10,9 @@ query GetOrderById($id: ID!) {
       count
       name
       totalPrice
+      modificators
     }
+
     address
     comment
   }

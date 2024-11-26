@@ -20,6 +20,7 @@ interface Props {
   name: string;
   phone: string;
   address: string;
+  modificators?: string;
   comment: string;
 }
 
@@ -76,6 +77,7 @@ export const processOrder = async (props: Props) => {
         totalPrice: item.totalPrice,
         name: item.item.name,
         id: task.create_orders_item.id,
+        modificators: JSON.stringify(item.modifiers.map((el) => el.name)),
       });
     }
 

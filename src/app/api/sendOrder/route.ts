@@ -20,20 +20,43 @@ export async function POST(request: Request) {
       );
     }
 
-    // const parseData = JSON.parse(basket);
+    // const message = `
+    // 📦 *Новый заказ*:
+    // - *Имя*: ${orderItem.orders_by_id.name}
+    // - *Email*: ${orderItem.orders_by_id.email}
+    // - *Телефон*: ${orderItem.orders_by_id.phone}
+    // - *Способ доставки*: ${orderItem.orders_by_id.isDelivery ? "Доставка" : "Самовывоз"}
+    // ${orderItem.orders_by_id.isDelivery && orderItem.orders_by_id.address ? `- *Адрес*: ${orderItem.orders_by_id.address}` : ""}
+    // - *Комментарий*: ${orderItem.orders_by_id.comment || "Нет"}
+    // - *Общая стоимость*: ${orderItem.orders_by_id.totalPrice}₽
+    // - *Корзина*:
+    // ${
+    //   orderItem.orders_by_id.basket
+    //     ?.map((item) => {
+    //       return `  • ${item.name} x${item.count} - ${item.totalPrice}₽
+    //     ${item.modificators.length > 0 ? `    Добавки: ${item.modificators}` : ""}`;
+    //     })
+    //     .join("\n") || "Корзина пуста"
+    // }
+    // `;
 
-    // Форматируем сообщение для Telegram
     const message = `
     📦 *Новый заказ*:
     - *Имя*: ${orderItem.orders_by_id.name}
     - *Email*: ${orderItem.orders_by_id.email}
     - *Телефон*: ${orderItem.orders_by_id.phone}
     - *Способ доставки*: ${orderItem.orders_by_id.isDelivery ? "Доставка" : "Самовывоз"}
-    ${orderItem.orders_by_id.isDelivery ? `- *Адрес*: ${orderItem.orders_by_id.address}` : ""}
+    ${orderItem.orders_by_id.isDelivery && orderItem.orders_by_id.address ? `- *Адрес*: ${orderItem.orders_by_id.address}` : ""}
     - *Комментарий*: ${orderItem.orders_by_id.comment || "Нет"}
     - *Общая стоимость*: ${orderItem.orders_by_id.totalPrice}₽
     - *Корзина*:
-    ${orderItem.orders_by_id.basket?.map((item) => `  • ${item.name} x${item.count}`).join("\n")}
+    ${
+      orderItem.orders_by_id.basket
+        ?.map((item) => {
+          return `  • ${item.name} x${item.count} - ${item.totalPrice}₽${item.modificators.length > 0 ? ` (${item.modificators})` : ""}`;
+        })
+        .join("\n") || "Корзина пуста"
+    }
     `;
 
     // // Отправляем сообщение через Telegram API
