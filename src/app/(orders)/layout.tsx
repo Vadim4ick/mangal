@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { Toaster } from "sonner";
 
 export default function OrdersLayout({
   children,
@@ -10,6 +11,8 @@ export default function OrdersLayout({
       <Header bottomLinks={false} />
 
       {children}
+
+      <Toaster richColors duration={2000} />
     </>
   );
 }

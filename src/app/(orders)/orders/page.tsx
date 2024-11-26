@@ -14,6 +14,11 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useBasketStore } from "@/store/basket";
 import axios from "axios";
+import { makePaymentFx } from "@/shared/services/createPayment";
+import { useEffect } from "react";
+import { checkPaymentFx } from "@/shared/lib/create-payment";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 const contactFormSchema = z.object({
   email: string().email({
@@ -47,7 +52,7 @@ const createSchemaWithDelivery = (isDelivery: boolean) => {
   );
 };
 
-interface OrderFormValues {
+export interface OrderFormValues {
   email: string;
   name: string;
   phone: string;
@@ -63,23 +68,61 @@ const OrdersPage = () => {
     values: OrderFormValues,
     { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
   ) => {
-    try {
-      const response = await axios.post("/api/sendOrder", {
-        ...values,
+    await makePaymentFx({
+      description: "Заказ номер: " + Date.now(),
+      amount: totalPrice,
+      metadata: {
+        orderId: Date.now(),
         totalPrice,
-        isDelivery,
-        basket,
-      });
+        isDelivery: isDelivery,
+        // basket: basket.map((item) => ({
+        //   name: item.item.name,
+        //   count: item.count,
+        //   modifiers: item.modifiers,
+        // })),
+        ...values,
+      },
+    });
+    // try {
+    //   const response = await axios.post("/api/sendOrder", {
+    //     ...values,
+    //     totalPrice,
+    //     isDelivery,
+    //     basket,
+    //   });
 
-      alert(response.data.message);
-      resetForm();
-      removeAllFromBasket();
-    } catch (error) {
-      console.error("Ошибка при отправке заказа:", error);
-      alert("Произошла ошибка при отправке заказа.");
-    } finally {
-      setSubmitting(false);
+    //   alert(response.data.message);
+    //   resetForm();
+    //   removeAllFromBasket();
+    // } catch (error) {
+    //   console.error("Ошибка при отправке заказа:", error);
+    //   alert("Произошла ошибка при отправке заказа.");
+    // } finally {
+    //   setSubmitting(false);
+    // }
+  };
+
+  useEffect(() => {
+    clearCartByPayment();
+  }, []);
+
+  const clearCartByPayment = async () => {
+    const paymentId = JSON.parse(localStorage.getItem("paymentId") as string);
+
+    if (!paymentId) {
+      return;
     }
+
+    const data = await checkPaymentFx({ paymentId });
+
+    if (data) {
+      if (data.result.status === "succeeded") {
+        removeAllFromBasket();
+        toast.success("Успешная оплата");
+      }
+    }
+
+    localStorage.removeItem("paymentId");
   };
 
   return (
