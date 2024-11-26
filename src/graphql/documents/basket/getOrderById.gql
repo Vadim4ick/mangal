@@ -1,0 +1,12 @@
+query GetOrderById($id: ID!) {
+  orders_by_id(id: $id) {
+    id
+    totalPrice
+    isDelivery
+    email
+    name
+    phone
+    address
+    comment
+  }
+}

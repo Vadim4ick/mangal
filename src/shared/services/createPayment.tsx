@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { gql } from "@/graphql/client";
 import axios from "axios";
 
 export interface PaymentDetails {
@@ -6,15 +8,18 @@ export interface PaymentDetails {
   amount: number;
   metadata: {
     orderId: string | number;
-    totalPrice: number;
-    isDelivery: boolean;
-    // basket: any[];
-    email: string;
-    name: string;
-    phone: string;
-    address: string;
-    comment: string;
   };
+}
+
+interface Props {
+  totalPrice: number;
+  isDelivery: boolean;
+  // basket: any[];
+  email: string;
+  name: string;
+  phone: string;
+  address: string;
+  comment: string;
 }
 
 export const makePaymentFx = async ({
@@ -28,14 +33,6 @@ export const makePaymentFx = async ({
       amount: amount,
       metadata: {
         orderId: metadata.orderId,
-        totalPrice: metadata.totalPrice,
-        isDelivery: metadata.isDelivery,
-        // basket: metadata.basket,
-        email: metadata.email,
-        name: metadata.name,
-        phone: metadata.phone,
-        address: metadata.address,
-        comment: metadata.comment,
       },
     });
 
@@ -44,5 +41,39 @@ export const makePaymentFx = async ({
   } catch (error) {
     const err = (error as any).response?.data.error || (error as Error);
     console.log(err);
+  }
+};
+
+export const processOrder = async (props: Props) => {
+  const { address, comment, email, isDelivery, name, phone, totalPrice } =
+    props;
+
+  try {
+    // // Создание заказа
+    const task = await gql.CreateOrderItem({
+      isDelivery: isDelivery,
+      totalPrice: totalPrice,
+      address,
+      comment,
+      email,
+      name,
+      phone,
+    });
+
+    // // Добавление товаров в заказ
+    // for (const item of basket) {
+    //   await gql.CreateOrderItem({
+    //     count: item.count,
+    //     size: item.size,
+    //     good_id: Number(item.id),
+    //     order_id: orderId.create_orders_item.id,
+    //     discount: item.discount,
+    //   });
+    // }
+
+    return { success: true, orderId: task.create_orders_item.id };
+  } catch (error) {
+    console.error("Error processing order:", error);
+    return { success: false };
   }
 };

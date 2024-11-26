@@ -1,0 +1,31 @@
+mutation CreateOrderItem(
+  $totalPrice: Int
+  $isDelivery: Boolean
+  $email: String
+  $name: String
+  $phone: String
+  $address: String
+  $comment: String
+) {
+  create_orders_item(
+    data: {
+      totalPrice: $totalPrice
+      isDelivery: $isDelivery
+      email: $email
+      name: $name
+      phone: $phone
+      address: $address
+      comment: $comment
+    }
+  ) {
+    id
+    totalPrice
+    isDelivery
+    email
+    name
+    phone
+    address
+
+    comment
+  }
+}

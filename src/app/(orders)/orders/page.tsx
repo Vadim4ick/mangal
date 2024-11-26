@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
@@ -13,12 +15,10 @@ import { TypeOf, string, z } from "zod";
 import { Form, Formik, FormikHelpers } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useBasketStore } from "@/store/basket";
-import axios from "axios";
-import { makePaymentFx } from "@/shared/services/createPayment";
+import { makePaymentFx, processOrder } from "@/shared/services/createPayment";
 import { useEffect } from "react";
 import { checkPaymentFx } from "@/shared/lib/create-payment";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 
 const contactFormSchema = z.object({
   email: string().email({
@@ -68,38 +68,25 @@ const OrdersPage = () => {
     values: OrderFormValues,
     { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
   ) => {
-    await makePaymentFx({
-      description: "Заказ номер: " + Date.now(),
-      amount: totalPrice,
-      metadata: {
-        orderId: Date.now(),
-        totalPrice,
-        isDelivery: isDelivery,
-        // basket: basket.map((item) => ({
-        //   name: item.item.name,
-        //   count: item.count,
-        //   modifiers: item.modifiers,
-        // })),
-        ...values,
-      },
+    const orderResult = await processOrder({
+      address: values.address,
+      comment: values.comment,
+      email: values.email,
+      isDelivery,
+      name: values.name,
+      phone: values.phone,
+      totalPrice,
     });
-    // try {
-    //   const response = await axios.post("/api/sendOrder", {
-    //     ...values,
-    //     totalPrice,
-    //     isDelivery,
-    //     basket,
-    //   });
 
-    //   alert(response.data.message);
-    //   resetForm();
-    //   removeAllFromBasket();
-    // } catch (error) {
-    //   console.error("Ошибка при отправке заказа:", error);
-    //   alert("Произошла ошибка при отправке заказа.");
-    // } finally {
-    //   setSubmitting(false);
-    // }
+    if (orderResult.success && orderResult.orderId) {
+      await makePaymentFx({
+        description: "Заказ номер: " + orderResult.orderId,
+        amount: totalPrice,
+        metadata: {
+          orderId: orderResult.orderId,
+        },
+      });
+    }
   };
 
   useEffect(() => {

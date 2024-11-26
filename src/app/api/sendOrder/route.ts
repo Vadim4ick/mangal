@@ -1,38 +1,12 @@
-import { Item } from "@/store/catalog";
+import { gql } from "@/graphql/client";
 import { NextResponse } from "next/server";
-
-// Определите типы для данных заказа
-interface OrderData {
-  email: string;
-  name: string;
-  phone: string;
-  address?: string;
-  comment?: string;
-  totalPrice: number;
-  isDelivery: boolean;
-  basket: Array<{
-    item: Item;
-    name: string;
-    count: number;
-    totalPrice: number;
-  }>;
-}
 
 export async function POST(request: Request) {
   const data = await request.json();
   try {
-    // const data: OrderData = await request.json();
+    const { orderId } = data?.object.metadata;
 
-    const {
-      email,
-      name,
-      phone,
-      address,
-      comment,
-      totalPrice,
-      isDelivery,
-      basket,
-    } = data?.object.metadata;
+    const orderItem = await gql.GetOrderById({ id: orderId });
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -51,18 +25,18 @@ export async function POST(request: Request) {
     // Форматируем сообщение для Telegram
     const message = `
     📦 *Новый заказ*:
-    - *Имя*: ${name}
-    - *Email*: ${email}
-    - *Телефон*: ${phone}
-    - *Способ доставки*: ${isDelivery === "true" ? "Доставка" : "Самовывоз"}
-    ${isDelivery === "true" ? `- *Адрес*: ${address}` : ""}
-    - *Комментарий*: ${comment || "Нет"}
-    - *Общая стоимость*: ${totalPrice}₽
-    - *Корзина*:
-    ${basket?.map((item) => `  • ${item.item.name} x${item.count}`).join("\n")}
-        `;
+    - *Имя*: ${orderItem.orders_by_id.name}
+    - *Email*: ${orderItem.orders_by_id.email}
+    - *Телефон*: ${orderItem.orders_by_id.phone}
+    - *Способ доставки*: ${orderItem.orders_by_id.isDelivery ? "Доставка" : "Самовывоз"}
+    ${orderItem.orders_by_id.isDelivery ? `- *Адрес*: ${orderItem.orders_by_id.address}` : ""}
+    - *Комментарий*: ${orderItem.orders_by_id.comment || "Нет"}
+    - *Общая стоимость*: ${orderItem.orders_by_id.totalPrice}₽
+    `;
+    // - *Корзина*:
+    // ${basket?.map((item) => `  • ${item.item.name} x${item.count}`).join("\n")}
 
-    // Отправляем сообщение через Telegram API
+    // // Отправляем сообщение через Telegram API
     const telegramResponse = await fetch(
       `https://api.telegram.org/bot${token}/sendMessage`,
       {
