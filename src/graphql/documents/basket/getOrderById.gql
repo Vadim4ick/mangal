@@ -6,6 +6,11 @@ query GetOrderById($id: ID!) {
     email
     name
     phone
+    basket {
+      count
+      name
+      totalPrice
+    }
     address
     comment
   }

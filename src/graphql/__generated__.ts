@@ -27,11 +27,32 @@ export enum EventEnum {
 
 export type Mutation = {
   readonly __typename?: 'Mutation';
+  readonly create_orderItem_item: Maybe<OrderItem>;
+  readonly create_orderItem_items: ReadonlyArray<OrderItem>;
   readonly create_orders_item: Maybe<Orders>;
   readonly create_orders_items: ReadonlyArray<Orders>;
+  readonly update_orderItem_batch: ReadonlyArray<OrderItem>;
+  readonly update_orderItem_item: Maybe<OrderItem>;
+  readonly update_orderItem_items: ReadonlyArray<OrderItem>;
   readonly update_orders_batch: ReadonlyArray<Orders>;
   readonly update_orders_item: Maybe<Orders>;
   readonly update_orders_items: ReadonlyArray<Orders>;
+};
+
+
+export type MutationCreate_OrderItem_ItemArgs = {
+  data: Create_OrderItem_Input;
+};
+
+
+export type MutationCreate_OrderItem_ItemsArgs = {
+  data: InputMaybe<ReadonlyArray<Create_OrderItem_Input>>;
+  filter: InputMaybe<OrderItem_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
@@ -43,6 +64,35 @@ export type MutationCreate_Orders_ItemArgs = {
 export type MutationCreate_Orders_ItemsArgs = {
   data: InputMaybe<ReadonlyArray<Create_Orders_Input>>;
   filter: InputMaybe<Orders_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type MutationUpdate_OrderItem_BatchArgs = {
+  data: InputMaybe<ReadonlyArray<Update_OrderItem_Input>>;
+  filter: InputMaybe<OrderItem_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type MutationUpdate_OrderItem_ItemArgs = {
+  data: Update_OrderItem_Input;
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdate_OrderItem_ItemsArgs = {
+  data: Update_OrderItem_Input;
+  filter: InputMaybe<OrderItem_Filter>;
+  ids: ReadonlyArray<InputMaybe<Scalars['ID']['input']>>;
   limit: InputMaybe<Scalars['Int']['input']>;
   offset: InputMaybe<Scalars['Int']['input']>;
   page: InputMaybe<Scalars['Int']['input']>;
@@ -81,10 +131,47 @@ export type MutationUpdate_Orders_ItemsArgs = {
 
 export type Query = {
   readonly __typename?: 'Query';
+  readonly orderItem: ReadonlyArray<OrderItem>;
+  readonly orderItem_aggregated: ReadonlyArray<OrderItem_Aggregated>;
+  readonly orderItem_by_id: Maybe<OrderItem>;
+  readonly orderItem_by_version: Maybe<Version_OrderItem>;
   readonly orders: ReadonlyArray<Orders>;
   readonly orders_aggregated: ReadonlyArray<Orders_Aggregated>;
   readonly orders_by_id: Maybe<Orders>;
   readonly orders_by_version: Maybe<Version_Orders>;
+};
+
+
+export type QueryOrderItemArgs = {
+  filter: InputMaybe<OrderItem_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryOrderItem_AggregatedArgs = {
+  filter: InputMaybe<OrderItem_Filter>;
+  groupBy: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryOrderItem_By_IdArgs = {
+  id: Scalars['ID']['input'];
+  version: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryOrderItem_By_VersionArgs = {
+  id: Scalars['ID']['input'];
+  version: Scalars['String']['input'];
 };
 
 
@@ -122,7 +209,13 @@ export type QueryOrders_By_VersionArgs = {
 
 export type Subscription = {
   readonly __typename?: 'Subscription';
+  readonly orderItem_mutated: Maybe<OrderItem_Mutated>;
   readonly orders_mutated: Maybe<Orders_Mutated>;
+};
+
+
+export type SubscriptionOrderItem_MutatedArgs = {
+  event: InputMaybe<EventEnum>;
 };
 
 
@@ -137,8 +230,26 @@ export type Boolean_Filter_Operators = {
   readonly _null: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type Count_Function_Filter_Operators = {
+  readonly count: InputMaybe<Number_Filter_Operators>;
+};
+
+export type Count_Functions = {
+  readonly __typename?: 'count_functions';
+  readonly count: Maybe<Scalars['Int']['output']>;
+};
+
+export type Create_OrderItem_Input = {
+  readonly count: InputMaybe<Scalars['Int']['input']>;
+  readonly id: InputMaybe<Scalars['ID']['input']>;
+  readonly name: InputMaybe<Scalars['String']['input']>;
+  readonly orderId: InputMaybe<Create_Orders_Input>;
+  readonly totalPrice: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Create_Orders_Input = {
   readonly address: InputMaybe<Scalars['String']['input']>;
+  readonly basket: InputMaybe<ReadonlyArray<InputMaybe<Create_OrderItem_Input>>>;
   readonly comment: InputMaybe<Scalars['String']['input']>;
   readonly email: InputMaybe<Scalars['String']['input']>;
   readonly id: InputMaybe<Scalars['ID']['input']>;
@@ -163,9 +274,78 @@ export type Number_Filter_Operators = {
   readonly _null: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type OrderItem = {
+  readonly __typename?: 'orderItem';
+  readonly count: Maybe<Scalars['Int']['output']>;
+  readonly id: Scalars['ID']['output'];
+  readonly name: Maybe<Scalars['String']['output']>;
+  readonly orderId: Maybe<Orders>;
+  readonly totalPrice: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type OrderItemOrderIdArgs = {
+  filter: InputMaybe<Orders_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type OrderItem_Aggregated = {
+  readonly __typename?: 'orderItem_aggregated';
+  readonly avg: Maybe<OrderItem_Aggregated_Fields>;
+  readonly avgDistinct: Maybe<OrderItem_Aggregated_Fields>;
+  readonly count: Maybe<OrderItem_Aggregated_Count>;
+  readonly countAll: Maybe<Scalars['Int']['output']>;
+  readonly countDistinct: Maybe<OrderItem_Aggregated_Count>;
+  readonly group: Maybe<Scalars['JSON']['output']>;
+  readonly max: Maybe<OrderItem_Aggregated_Fields>;
+  readonly min: Maybe<OrderItem_Aggregated_Fields>;
+  readonly sum: Maybe<OrderItem_Aggregated_Fields>;
+  readonly sumDistinct: Maybe<OrderItem_Aggregated_Fields>;
+};
+
+export type OrderItem_Aggregated_Count = {
+  readonly __typename?: 'orderItem_aggregated_count';
+  readonly count: Maybe<Scalars['Int']['output']>;
+  readonly id: Maybe<Scalars['Int']['output']>;
+  readonly name: Maybe<Scalars['Int']['output']>;
+  readonly orderId: Maybe<Scalars['Int']['output']>;
+  readonly totalPrice: Maybe<Scalars['Int']['output']>;
+};
+
+export type OrderItem_Aggregated_Fields = {
+  readonly __typename?: 'orderItem_aggregated_fields';
+  readonly count: Maybe<Scalars['Float']['output']>;
+  readonly id: Maybe<Scalars['Float']['output']>;
+  readonly orderId: Maybe<Scalars['Float']['output']>;
+  readonly totalPrice: Maybe<Scalars['Float']['output']>;
+};
+
+export type OrderItem_Filter = {
+  readonly _and: InputMaybe<ReadonlyArray<InputMaybe<OrderItem_Filter>>>;
+  readonly _or: InputMaybe<ReadonlyArray<InputMaybe<OrderItem_Filter>>>;
+  readonly count: InputMaybe<Number_Filter_Operators>;
+  readonly id: InputMaybe<Number_Filter_Operators>;
+  readonly name: InputMaybe<String_Filter_Operators>;
+  readonly orderId: InputMaybe<Orders_Filter>;
+  readonly totalPrice: InputMaybe<Number_Filter_Operators>;
+};
+
+export type OrderItem_Mutated = {
+  readonly __typename?: 'orderItem_mutated';
+  readonly data: Maybe<OrderItem>;
+  readonly event: Maybe<EventEnum>;
+  readonly key: Scalars['ID']['output'];
+};
+
 export type Orders = {
   readonly __typename?: 'orders';
   readonly address: Maybe<Scalars['String']['output']>;
+  readonly basket: Maybe<ReadonlyArray<Maybe<OrderItem>>>;
+  readonly basket_func: Maybe<Count_Functions>;
   readonly comment: Maybe<Scalars['String']['output']>;
   readonly email: Maybe<Scalars['String']['output']>;
   readonly id: Scalars['ID']['output'];
@@ -173,6 +353,16 @@ export type Orders = {
   readonly name: Maybe<Scalars['String']['output']>;
   readonly phone: Maybe<Scalars['String']['output']>;
   readonly totalPrice: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type OrdersBasketArgs = {
+  filter: InputMaybe<OrderItem_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type Orders_Aggregated = {
@@ -192,6 +382,7 @@ export type Orders_Aggregated = {
 export type Orders_Aggregated_Count = {
   readonly __typename?: 'orders_aggregated_count';
   readonly address: Maybe<Scalars['Int']['output']>;
+  readonly basket: Maybe<Scalars['Int']['output']>;
   readonly comment: Maybe<Scalars['Int']['output']>;
   readonly email: Maybe<Scalars['Int']['output']>;
   readonly id: Maybe<Scalars['Int']['output']>;
@@ -211,6 +402,8 @@ export type Orders_Filter = {
   readonly _and: InputMaybe<ReadonlyArray<InputMaybe<Orders_Filter>>>;
   readonly _or: InputMaybe<ReadonlyArray<InputMaybe<Orders_Filter>>>;
   readonly address: InputMaybe<String_Filter_Operators>;
+  readonly basket: InputMaybe<OrderItem_Filter>;
+  readonly basket_func: InputMaybe<Count_Function_Filter_Operators>;
   readonly comment: InputMaybe<String_Filter_Operators>;
   readonly email: InputMaybe<String_Filter_Operators>;
   readonly id: InputMaybe<Number_Filter_Operators>;
@@ -249,8 +442,17 @@ export type String_Filter_Operators = {
   readonly _starts_with: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Update_OrderItem_Input = {
+  readonly count: InputMaybe<Scalars['Int']['input']>;
+  readonly id: InputMaybe<Scalars['ID']['input']>;
+  readonly name: InputMaybe<Scalars['String']['input']>;
+  readonly orderId: InputMaybe<Update_Orders_Input>;
+  readonly totalPrice: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Update_Orders_Input = {
   readonly address: InputMaybe<Scalars['String']['input']>;
+  readonly basket: InputMaybe<ReadonlyArray<InputMaybe<Update_OrderItem_Input>>>;
   readonly comment: InputMaybe<Scalars['String']['input']>;
   readonly email: InputMaybe<Scalars['String']['input']>;
   readonly id: InputMaybe<Scalars['ID']['input']>;
@@ -260,9 +462,19 @@ export type Update_Orders_Input = {
   readonly totalPrice: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Version_OrderItem = {
+  readonly __typename?: 'version_orderItem';
+  readonly count: Maybe<Scalars['Int']['output']>;
+  readonly id: Maybe<Scalars['ID']['output']>;
+  readonly name: Maybe<Scalars['String']['output']>;
+  readonly orderId: Maybe<Scalars['JSON']['output']>;
+  readonly totalPrice: Maybe<Scalars['Int']['output']>;
+};
+
 export type Version_Orders = {
   readonly __typename?: 'version_orders';
   readonly address: Maybe<Scalars['String']['output']>;
+  readonly basket: Maybe<Scalars['JSON']['output']>;
   readonly comment: Maybe<Scalars['String']['output']>;
   readonly email: Maybe<Scalars['String']['output']>;
   readonly id: Maybe<Scalars['ID']['output']>;
@@ -285,12 +497,22 @@ export type CreateOrderItemMutationVariables = Exact<{
 
 export type CreateOrderItemMutation = { readonly __typename?: 'Mutation', readonly create_orders_item: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string } };
 
+export type CreateOrderItemItemMutationVariables = Exact<{
+  count: InputMaybe<Scalars['Int']['input']>;
+  totalPrice: InputMaybe<Scalars['Int']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type CreateOrderItemItemMutation = { readonly __typename?: 'Mutation', readonly create_orderItem_item: { readonly __typename?: 'orderItem', readonly count: number, readonly id: string, readonly name: string, readonly totalPrice: number } };
+
 export type GetOrderByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders_by_id: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string } };
+export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders_by_id: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string, readonly basket: ReadonlyArray<{ readonly __typename?: 'orderItem', readonly count: number, readonly name: string, readonly totalPrice: number }> } };
 
 
 export const CreateOrderItemDocument = gql`
@@ -309,6 +531,18 @@ export const CreateOrderItemDocument = gql`
   }
 }
     `;
+export const CreateOrderItemItemDocument = gql`
+    mutation CreateOrderItemItem($count: Int, $totalPrice: Int, $name: String, $id: ID!) {
+  create_orderItem_item(
+    data: {count: $count, name: $name, totalPrice: $totalPrice, orderId: {id: $id}}
+  ) {
+    count
+    id
+    name
+    totalPrice
+  }
+}
+    `;
 export const GetOrderByIdDocument = gql`
     query GetOrderById($id: ID!) {
   orders_by_id(id: $id) {
@@ -318,6 +552,11 @@ export const GetOrderByIdDocument = gql`
     email
     name
     phone
+    basket {
+      count
+      name
+      totalPrice
+    }
     address
     comment
   }
@@ -333,6 +572,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     CreateOrderItem(variables?: CreateOrderItemMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateOrderItemMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateOrderItemMutation>(CreateOrderItemDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateOrderItem', 'mutation', variables);
+    },
+    CreateOrderItemItem(variables: CreateOrderItemItemMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateOrderItemItemMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateOrderItemItemMutation>(CreateOrderItemItemDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateOrderItemItem', 'mutation', variables);
     },
     GetOrderById(variables: GetOrderByIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetOrderByIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetOrderByIdQuery>(GetOrderByIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetOrderById', 'query', variables);

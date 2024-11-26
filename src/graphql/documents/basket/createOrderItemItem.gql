@@ -1,0 +1,20 @@
+mutation CreateOrderItemItem(
+  $count: Int
+  $totalPrice: Int
+  $name: String
+  $id: ID!
+) {
+  create_orderItem_item(
+    data: {
+      count: $count
+      name: $name
+      totalPrice: $totalPrice
+      orderId: { id: $id }
+    }
+  ) {
+    count
+    id
+    name
+    totalPrice
+  }
+}

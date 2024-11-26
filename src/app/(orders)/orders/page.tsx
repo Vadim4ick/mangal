@@ -73,6 +73,7 @@ const OrdersPage = () => {
       comment: values.comment,
       email: values.email,
       isDelivery,
+      basket: basket,
       name: values.name,
       phone: values.phone,
       totalPrice,
