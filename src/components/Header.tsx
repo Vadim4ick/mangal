@@ -124,7 +124,7 @@ const Header = ({ bottomLinks = true }: { bottomLinks?: boolean }) => {
                   <Location />
 
                   <p className="text-[14px] font-[700] leading-[19px] text-white">
-                    Ул. 40 лет победы, 12
+                    ул. Карякина, 7, Краснодар
                   </p>
                 </div>
                 <div>
@@ -135,7 +135,7 @@ const Header = ({ bottomLinks = true }: { bottomLinks?: boolean }) => {
                     <Phone />
 
                     <p className="text-[14px] font-[700] leading-[19px] text-white">
-                      + 7 (918) 342-00-75
+                      + 7 (900) 555-83-83
                     </p>
                   </a>
                 </div>
