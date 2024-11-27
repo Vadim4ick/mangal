@@ -19,7 +19,7 @@ const SocialsComponent = () => {
       </p>
 
       <div className="flex gap-[24px] rounded-[8px] bg-[#3B3B3B] px-[12px] py-[8px]">
-        <Link href="#">
+        <Link target="_blank" href="https://vk.com/kingmangalkrd">
           <Vk />
         </Link>
 
@@ -82,7 +82,7 @@ const Footer = () => {
                   </div>
                 </div>
                 <p className="text-[18px] font-[700] leading-[25px] text-white">
-                  + 7 (918) 342-00-75
+                  + 7 (900) 555-83-83
                 </p>
               </li>
               <li className="flex items-center gap-[15px]">
@@ -92,7 +92,7 @@ const Footer = () => {
                   </div>
                 </div>
                 <p className="text-[18px] font-[700] leading-[25px] text-white">
-                  Краснодар, Ул. 40 лет победы, 12
+                  ул. Карякина, 7, Краснодар
                 </p>
               </li>
               <li className="flex items-center gap-[15px]">
