@@ -14,14 +14,21 @@ export interface PaymentDetails {
 }
 
 export async function createPayment(details: PaymentDetails) {
-  // const test = details.basket.map((item) => ({
-  //   description: item.item.name,
-  //   quantity: item.count,
-  //   amount: {
-  //     value: item.totalPrice,
-  //     currency: "RUB",
-  //   },
-  // }));
+  const items = details.basket.map((item) => ({
+    description: item.item.name,
+    quantity: item.count,
+    amount: {
+      value: item.totalPrice,
+      currency: "RUB",
+    },
+
+    vat_code: 1,
+    payment_mode: "full_payment",
+    payment_subject: "commodity",
+  }));
+
+  console.log(items);
+  console.log(details);
 
   try {
     const { data } = await axios({
@@ -37,7 +44,7 @@ export async function createPayment(details: PaymentDetails) {
       },
       data: {
         amount: {
-          value: "165.00",
+          value: details.amount,
           currency: "RUB",
         },
         confirmation: {
@@ -55,22 +62,9 @@ export async function createPayment(details: PaymentDetails) {
 
         receipt: {
           customer: {
-            email: "customer@example.com",
-            phone: "+79000000000",
+            ...details.customer,
           },
-          items: [
-            {
-              description: "Шашлык",
-              quantity: "1.00",
-              amount: {
-                value: "165.00",
-                currency: "RUB",
-              },
-              vat_code: 1,
-              payment_mode: "full_payment",
-              payment_subject: "commodity",
-            },
-          ],
+          items: items,
         },
       },
     });
