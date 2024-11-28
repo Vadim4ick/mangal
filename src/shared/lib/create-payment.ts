@@ -36,7 +36,7 @@ export async function createPayment(details: PaymentDetails) {
     },
     data: {
       amount: {
-        value: `${details.amount}`,
+        value: details.amount,
         currency: "RUB",
       },
       confirmation: {
@@ -53,7 +53,8 @@ export async function createPayment(details: PaymentDetails) {
       },
       receipt: {
         customer: {
-          ...details.customer,
+          email: "customer@example.com",
+          phone: "+79000000000",
         },
         items: [
           {
