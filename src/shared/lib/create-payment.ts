@@ -13,6 +13,29 @@ export interface PaymentDetails {
   basket: BasketItem[];
 }
 
+function formatPhoneNumber(phone: string): string {
+  // Remove all non-digit characters except the leading +
+  const formatted = phone.replace(/[^\d+]/g, "");
+
+  // If the phone number starts with +7 and has 12 characters, it's correct
+  if (/^\+7\d{10}$/.test(formatted)) {
+    return formatted;
+  }
+
+  // If the phone number starts with 8 and has 11 characters, replace the 8 with +7
+  if (/^8\d{10}$/.test(formatted)) {
+    return "+7" + formatted.slice(1);
+  }
+
+  // If the phone number has 10 digits, prepend +7
+  if (/^\d{10}$/.test(formatted)) {
+    return "+7" + formatted;
+  }
+
+  // Return the formatted number or handle invalid format as needed
+  return formatted;
+}
+
 export async function createPayment(details: PaymentDetails) {
   const items = details.basket.map((item) => ({
     description: item.item.name,
@@ -62,7 +85,8 @@ export async function createPayment(details: PaymentDetails) {
 
         receipt: {
           customer: {
-            ...details.customer,
+            email: details.customer.email,
+            phone: formatPhoneNumber(details.customer.phone),
           },
           items: items,
         },
