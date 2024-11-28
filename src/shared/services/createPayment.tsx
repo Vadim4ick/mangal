@@ -10,6 +10,10 @@ export interface PaymentDetails {
   metadata: {
     orderId: string | number;
   };
+  customer: {
+    email: string;
+    phone: string;
+  };
 }
 
 interface Props {
@@ -28,6 +32,7 @@ export const makePaymentFx = async ({
   amount,
   description,
   metadata,
+  customer,
 }: PaymentDetails) => {
   try {
     const { data } = await axios.post("/api/create-payment", {
@@ -35,6 +40,9 @@ export const makePaymentFx = async ({
       amount: amount,
       metadata: {
         orderId: metadata.orderId,
+      },
+      customer: {
+        ...customer,
       },
     });
 
