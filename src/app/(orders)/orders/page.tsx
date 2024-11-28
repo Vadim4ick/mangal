@@ -28,12 +28,11 @@ const contactFormSchema = z.object({
     .string()
     .min(2, { message: "Name must be at least 2 characters" })
     .max(50, { message: "Name must be at most 50 characters" }),
-  phone: z
-    .string()
-    .length(16, { message: "Phone number must be exactly 16 characters long" })
-    .regex(/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/, {
-      message: "Phone number must be in the format +7(999)999-99-99",
-    }),
+  phone: z.string(),
+  // .length(16, { message: "Phone number must be exactly 16 characters long" })
+  // .regex(/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/, {
+  //   message: "Phone number must be in the format +7(999)999-99-99",
+  // }),
 });
 
 // Динамическое добавление полей для адреса доставки

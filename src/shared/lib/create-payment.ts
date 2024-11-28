@@ -32,6 +32,9 @@ export async function createPayment(details: PaymentDetails) {
         type: "redirect",
         return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
       },
+      payment_method_data: {
+        type: "bank_card",
+      },
       capture: true,
       description: details.description,
       metadata: {
