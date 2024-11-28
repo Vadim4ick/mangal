@@ -10,6 +10,7 @@ export async function POST(req: Request) {
       amount: body.amount,
       metadata: body.metadata,
       customer: body.customer,
+      basket: body.basket,
     });
 
     return NextResponse.json({ result: paymentData });

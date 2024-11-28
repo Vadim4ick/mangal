@@ -14,6 +14,7 @@ export interface PaymentDetails {
     email: string;
     phone: string;
   };
+  basket: BasketItem[];
 }
 
 interface Props {
@@ -33,6 +34,7 @@ export const makePaymentFx = async ({
   description,
   metadata,
   customer,
+  basket,
 }: PaymentDetails) => {
   try {
     const { data } = await axios.post("/api/create-payment", {
@@ -44,6 +46,7 @@ export const makePaymentFx = async ({
       customer: {
         ...customer,
       },
+      basket,
     });
 
     localStorage.setItem("paymentId", JSON.stringify(data.result.data.id));
