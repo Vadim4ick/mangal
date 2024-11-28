@@ -8,10 +8,6 @@ export interface PaymentDetails {
 }
 
 export async function createPayment(details: PaymentDetails) {
-  console.log("test", {
-    ...details.metadata,
-    basket: JSON.stringify(details.metadata.basket),
-  });
   const { data } = await axios({
     method: "post",
     url: "https://api.yookassa.ru/v3/payments",
@@ -25,39 +21,27 @@ export async function createPayment(details: PaymentDetails) {
     },
     data: {
       amount: {
-        value: "165.00",
+        value: details.amount,
         currency: "RUB",
       },
       confirmation: {
         type: "redirect",
-        return_url: "https://example.com/success",
+        return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
       },
       payment_method_data: {
         type: "bank_card",
       },
       capture: true,
-      description: "Оплата заказа №80",
+      description: details.description,
       metadata: {
-        orderId: "80",
+        ...details.metadata,
       },
+
       receipt: {
         customer: {
           email: "customer@example.com",
           phone: "+79000000000",
         },
-        items: [
-          {
-            description: "Шашлык",
-            quantity: "1.00",
-            amount: {
-              value: "165.00",
-              currency: "RUB",
-            },
-            vat_code: 1,
-            payment_mode: "full_payment",
-            payment_subject: "commodity",
-          },
-        ],
       },
     },
   });
@@ -73,3 +57,42 @@ export const checkPaymentFx = async ({ paymentId }: { paymentId: string }) => {
     console.error("Ошибка при проверке заказа:", (error as Error)?.message);
   }
 };
+
+// {
+//   amount: {
+//     value: details.amount,
+//     currency: "RUB",
+//   },
+//   confirmation: {
+//     type: "redirect",
+//     return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
+//   },
+//   payment_method_data: {
+//     type: "bank_card",
+//   },
+//   capture: true,
+//   description: details.description,
+//   metadata: {
+//     ...details.metadata,
+//   },
+
+//   receipt: {
+//     customer: {
+//       email: "customer@example.com",
+//       phone: "+79000000000",
+//     },
+//     items: [
+//       {
+//         description: "Название товара",
+//         quantity: "1.00",
+//         amount: {
+//           value: "165.00",
+//           currency: "RUB",
+//         },
+//         vat_code: 1, // Код ставки НДС (объяснение ниже)
+//         payment_mode: "full_payment", // Полная оплата
+//         payment_subject: "commodity", // Тип товара
+//       },
+//     ],
+//   },
+// }
