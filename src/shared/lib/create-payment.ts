@@ -53,10 +53,30 @@ export async function createPayment(details: PaymentDetails) {
       },
 
       receipt: {
-        customer: details.customer,
-
-        items: test,
+        customer: {
+          email: "customer@example.com",
+          phone: "+79000000000",
+        },
+        items: [
+          {
+            description: "Шашлык",
+            quantity: "1.00",
+            amount: {
+              value: "165.00",
+              currency: "RUB",
+            },
+            vat_code: 1,
+            payment_mode: "full_payment",
+            payment_subject: "commodity",
+          },
+        ],
       },
+
+      // receipt: {
+      //   customer: details.customer,
+
+      //   items: test,
+      // },
     },
   });
 
