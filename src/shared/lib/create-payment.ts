@@ -48,14 +48,15 @@ export async function createPayment(details: PaymentDetails) {
           type: "bank_card",
         },
         capture: true,
+
         description: "test",
         metadata: {
           orderId: "42424",
         },
+
         receipt: {
           customer: {
-            email: "customer@example.com",
-            phone: "+79000000000",
+            ...details.customer,
           },
           items: [
             {
