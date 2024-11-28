@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BasketItem } from "@/store/basket";
 import axios from "axios";
 
 export interface PaymentDetails {
@@ -9,9 +10,19 @@ export interface PaymentDetails {
     email: string;
     phone: string;
   };
+  basket: BasketItem[];
 }
 
 export async function createPayment(details: PaymentDetails) {
+  const test = details.basket.map((item) => ({
+    description: item.item.name,
+    quantity: item.count,
+    amount: {
+      value: item.totalPrice,
+      currency: "RUB",
+    },
+  }));
+
   const { data } = await axios({
     method: "post",
     url: "https://api.yookassa.ru/v3/payments",
@@ -43,6 +54,8 @@ export async function createPayment(details: PaymentDetails) {
 
       receipt: {
         customer: details.customer,
+
+        items: test,
       },
     },
   });
