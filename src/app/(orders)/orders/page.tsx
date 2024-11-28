@@ -72,38 +72,38 @@ const OrdersPage = () => {
     setPromocode(e.target.value);
   };
 
-  const handleApplyPromocode = async () => {
-    let price = totalPrice;
+  // const handleApplyPromocode = async () => {
+  //   let price = totalPrice;
 
-    if (!promocodes?.length || !promocode.trim().length) return { price };
+  //   if (!promocodes?.length || !promocode.trim().length) return { price };
 
-    const validPromocode = promocodes
-      .filter((promo) => Boolean(promo.is_active))
-      .find((promo) => promo.code === promocode);
+  //   const validPromocode = promocodes
+  //     .filter((promo) => Boolean(promo.is_active))
+  //     .find((promo) => promo.code === promocode);
 
-    if (validPromocode) {
-      // applyPromocode(validPromocode.code, validPromocode.discount);
+  //   if (validPromocode) {
+  //     // applyPromocode(validPromocode.code, validPromocode.discount);
 
-      price = Math.floor(
-        totalPrice - (totalPrice * validPromocode.discount) / 100,
-      );
+  //     price = Math.floor(
+  //       totalPrice - (totalPrice * validPromocode.discount) / 100,
+  //     );
 
-      toast.success(
-        `Промокод ${validPromocode.code} со скидкой ${validPromocode.discount}% успешно применен!`,
-      );
-      setSuccess(true);
-    } else {
-      toast.error("Неверный промокод!");
-    }
+  //     toast.success(
+  //       `Промокод ${validPromocode.code} со скидкой ${validPromocode.discount}% успешно применен!`,
+  //     );
+  //     setSuccess(true);
+  //   } else {
+  //     toast.error("Неверный промокод!");
+  //   }
 
-    return { price };
-  };
+  //   return { price };
+  // };
 
   const handleSubmit = async (
     values: OrderFormValues,
     { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
   ) => {
-    const { price } = await handleApplyPromocode();
+    // const { price } = await handleApplyPromocode();
 
     const orderResult = await processOrder({
       address: values.address,
@@ -113,12 +113,12 @@ const OrdersPage = () => {
       basket: basket,
       name: values.name,
       phone: values.phone,
-      totalPrice: price,
+      totalPrice: totalPrice,
     });
     if (orderResult.success && orderResult.orderId) {
       await makePaymentFx({
         description: "Заказ номер: " + orderResult.orderId,
-        amount: price,
+        amount: totalPrice,
         metadata: {
           orderId: orderResult.orderId,
         },
