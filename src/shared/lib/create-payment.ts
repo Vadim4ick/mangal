@@ -13,7 +13,7 @@ export interface PaymentDetails {
   basket: BasketItem[];
 }
 
-export async function createPayment() {
+export async function createPayment(details: PaymentDetails) {
   // const test = details.basket.map((item) => ({
   //   description: item.item.name,
   //   quantity: item.count,
