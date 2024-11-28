@@ -68,25 +68,25 @@ const OrdersPage = () => {
     values: OrderFormValues,
     { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
   ) => {
-    // const orderResult = await processOrder({
-    //   address: values.address,
-    //   comment: values.comment,
-    //   email: values.email,
-    //   isDelivery,
-    //   basket: basket,
-    //   name: values.name,
-    //   phone: values.phone,
-    //   totalPrice,
-    // });
-    // if (orderResult.success && orderResult.orderId) {
-    //   await makePaymentFx({
-    //     description: "Заказ номер: " + orderResult.orderId,
-    //     amount: totalPrice,
-    //     metadata: {
-    //       orderId: orderResult.orderId,
-    //     },
-    //   });
-    // }
+    const orderResult = await processOrder({
+      address: values.address,
+      comment: values.comment,
+      email: values.email,
+      isDelivery,
+      basket: basket,
+      name: values.name,
+      phone: values.phone,
+      totalPrice,
+    });
+    if (orderResult.success && orderResult.orderId) {
+      await makePaymentFx({
+        description: "Заказ номер: " + orderResult.orderId,
+        amount: totalPrice,
+        metadata: {
+          orderId: orderResult.orderId,
+        },
+      });
+    }
   };
 
   useEffect(() => {
