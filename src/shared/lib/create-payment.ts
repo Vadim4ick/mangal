@@ -36,25 +36,24 @@ export async function createPayment(details: PaymentDetails) {
     },
     data: {
       amount: {
-        value: "165.00",
+        value: `${details.amount}`,
         currency: "RUB",
       },
       confirmation: {
         type: "redirect",
-        return_url: "https://example.com/success",
+        return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
       },
       payment_method_data: {
         type: "bank_card",
       },
       capture: true,
-      description: "Оплата заказа №80",
+      description: details.description,
       metadata: {
-        orderId: "80",
+        ...details.metadata,
       },
       receipt: {
         customer: {
-          email: "customer@example.com",
-          phone: "+79000000000",
+          ...details.customer,
         },
         items: [
           {
@@ -85,12 +84,12 @@ export async function createPayment(details: PaymentDetails) {
   // },
   //   data: {
   //     amount: {
-  //       value: details.amount,
-  //       currency: "RUB",
+  // value: details.amount,
+  // currency: "RUB",
   //     },
   //     confirmation: {
-  //       type: "redirect",
-  //       return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
+  // type: "redirect",
+  // return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
   //     },
   //     payment_method_data: {
   //       type: "bank_card",
