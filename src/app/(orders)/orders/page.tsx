@@ -84,6 +84,10 @@ const OrdersPage = () => {
         metadata: {
           orderId: orderResult.orderId,
         },
+        customer: {
+          email: values.email,
+          phone: values.phone,
+        },
       });
     }
   };

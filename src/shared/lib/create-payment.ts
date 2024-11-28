@@ -5,6 +5,10 @@ export interface PaymentDetails {
   description: string;
   amount: number;
   metadata: any;
+  customer: {
+    email: string;
+    phone: string;
+  };
 }
 
 export async function createPayment(details: PaymentDetails) {
@@ -38,10 +42,7 @@ export async function createPayment(details: PaymentDetails) {
       },
 
       receipt: {
-        customer: {
-          email: "customer@example.com",
-          phone: "+79000000000",
-        },
+        customer: details.customer,
       },
     },
   });
