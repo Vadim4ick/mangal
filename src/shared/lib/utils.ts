@@ -20,3 +20,20 @@ export const calcPrevPriceForSale = ({
 
   return formatPrice(totalPrice);
 };
+
+export const pathImage = (img: string) => {
+  return `${process.env.NEXT_PUBLIC_SERVER_URL}/assets/${img}`;
+};
+
+export function formatPhoneNumber(phone: string) {
+  // Удаляем лишние символы, если они есть
+  const cleaned = phone.replace(/\D/g, "");
+
+  // Применяем маску
+  const formatted = cleaned.replace(
+    /(\d)(\d{3})(\d{3})(\d{2})(\d{2})/,
+    "+$1 ($2) $3-$4-$5",
+  );
+
+  return formatted;
+}

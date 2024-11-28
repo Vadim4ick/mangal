@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetSettings } from "@/shared/hooks/useGetSettings";
 import { useMediaQuery } from "@/shared/hooks/useMedia";
 import { Location } from "@/shared/icons/Location";
 import { LogoFooter } from "@/shared/icons/LogoFooter";
@@ -8,6 +9,7 @@ import { Tg } from "@/shared/icons/social/Tg";
 import { Vk } from "@/shared/icons/social/Vk";
 import { Whatsapp } from "@/shared/icons/social/Whatsapp";
 import { Time } from "@/shared/icons/Time";
+import { formatPhoneNumber } from "@/shared/lib/utils";
 import { Container } from "@/shared/ui/container";
 import Link from "next/link";
 
@@ -58,6 +60,8 @@ const Policy = () => {
 const Footer = () => {
   const isMobile = useMediaQuery(768);
 
+  const { settings } = useGetSettings();
+
   return (
     <footer className="bg-[#363636] pb-[17px] pt-[39px] max-mobile:py-[44px]">
       <Container>
@@ -75,36 +79,42 @@ const Footer = () => {
 
           <div className="flex flex-col justify-between gap-[57px] max-mobile:items-center max-mobile:gap-[48px]">
             <ul className="flex flex-col max-mobile:self-start">
-              <li className="flex items-center gap-[15px]">
-                <div className="flex items-center justify-center rounded-t-[8px] bg-[#3B3B3B] px-[6px] pb-[12px] pt-[8px]">
-                  <div className="flex size-[26px] items-center justify-center">
-                    <Phone className="size-[26px]" />
+              {settings?.phone && (
+                <li className="flex items-center gap-[15px]">
+                  <div className="flex items-center justify-center rounded-t-[8px] bg-[#3B3B3B] px-[6px] pb-[12px] pt-[8px]">
+                    <div className="flex size-[26px] items-center justify-center">
+                      <Phone className="size-[26px]" />
+                    </div>
                   </div>
-                </div>
-                <p className="text-[18px] font-[700] leading-[25px] text-white">
-                  + 7 (900) 555-83-83
-                </p>
-              </li>
-              <li className="flex items-center gap-[15px]">
-                <div className="flex items-center justify-center bg-[#3B3B3B] px-[6px] pb-[12px] pt-[12px]">
-                  <div className="flex size-[26px] items-center justify-center">
-                    <Location className="size-[25px]" />
+                  <p className="text-[18px] font-[700] leading-[25px] text-white">
+                    {formatPhoneNumber(settings.phone)}
+                  </p>
+                </li>
+              )}
+              {settings?.adress && (
+                <li className="flex items-center gap-[15px]">
+                  <div className="flex items-center justify-center bg-[#3B3B3B] px-[6px] pb-[12px] pt-[12px]">
+                    <div className="flex size-[26px] items-center justify-center">
+                      <Location className="size-[25px]" />
+                    </div>
                   </div>
-                </div>
-                <p className="text-[18px] font-[700] leading-[25px] text-white">
-                  ул. Карякина, 7, Краснодар
-                </p>
-              </li>
-              <li className="flex items-center gap-[15px]">
-                <div className="flex items-center justify-center rounded-b-[8px] bg-[#3B3B3B] px-[6px] pb-[8px] pt-[12px]">
-                  <div className="flex size-[26px] items-center justify-center">
-                    <Time className="size-[20px]" />
+                  <p className="text-[18px] font-[700] leading-[25px] text-white">
+                    {settings.adress}
+                  </p>
+                </li>
+              )}
+              {settings?.time && (
+                <li className="flex items-center gap-[15px]">
+                  <div className="flex items-center justify-center rounded-b-[8px] bg-[#3B3B3B] px-[6px] pb-[8px] pt-[12px]">
+                    <div className="flex size-[26px] items-center justify-center">
+                      <Time className="size-[20px]" />
+                    </div>
                   </div>
-                </div>
-                <p className="text-[18px] font-[700] leading-[25px] text-white">
-                  Ежедневно с 10:00 до 22:00
-                </p>
-              </li>
+                  <p className="text-[18px] font-[700] leading-[25px] text-white">
+                    {settings.time}
+                  </p>
+                </li>
+              )}
             </ul>
 
             <SocialsComponent />
@@ -114,12 +124,12 @@ const Footer = () => {
 
         <div className="flex items-center justify-center gap-[11px] pt-[21px] text-[12px] leading-[16px] text-[#B6B6B6] max-mobile:flex-col">
           <div className="flex items-center gap-[11px]">
-            <p>ИП Казаев Артём Вадимович</p>
-            <p>БИК 040349602</p>
+            {settings?.ip && <p>{settings.ip}</p>}
+            {settings?.bik && <p>{settings.bik}</p>}
           </div>
           <div className="flex items-center gap-[11px]">
-            <p>ОГРНИП 318237500432899</p>
-            <p>ИНН 233913534972</p>
+            {settings?.inn && <p>{settings.inn}</p>}
+            {settings?.ogrnip && <p>{settings.ogrnip}</p>}
           </div>
         </div>
       </Container>

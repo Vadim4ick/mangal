@@ -15,9 +15,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { useHeaderStore } from "@/store/header";
-import { cn } from "@/shared/lib/utils";
+import { cn, pathImage } from "@/shared/lib/utils";
+import { GetHomePageQuery } from "@/graphql/__generated__";
 
-const Banner = () => {
+const Banner = ({
+  slider,
+}: {
+  slider: GetHomePageQuery["homePage"]["slider"];
+}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -66,11 +71,11 @@ const Banner = () => {
               className="w-full"
             >
               <CarouselContent>
-                {Array.from({ length: 1 }).map((_, index) => (
+                {slider.map((slide, index) => (
                   <CarouselItem key={index}>
                     <div className="relative h-[400px] w-full">
                       <Image
-                        src={"/img/banners/1.png"}
+                        src={pathImage(slide.slider_id.img.id)}
                         fill
                         alt="banners"
                         className="rounded-[12px] object-cover"
@@ -79,11 +84,11 @@ const Banner = () => {
                       <div className="absolute flex h-full w-full flex-col justify-between p-[60px] max-mobile:items-center max-mobile:px-[22px] max-mobile:pb-[26px] max-mobile:pt-[30px]">
                         <div className="flex w-full flex-col items-start gap-[14px]">
                           <h2 className="text-[47px] font-[800] uppercase leading-[64px] text-white max-mobile:text-[28px] max-mobile:leading-[38px]">
-                            бесплатная доставка
+                            {slide.slider_id.title}
                           </h2>
 
                           <p className="text-[18px] font-[700] leading-[25px] text-[#F4F4F4]">
-                            При сумме заказа от 2000 руб.
+                            {slide.slider_id.desc}
                           </p>
                         </div>
 
