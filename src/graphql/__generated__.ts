@@ -148,6 +148,10 @@ export type Query = {
   readonly orders_aggregated: ReadonlyArray<Orders_Aggregated>;
   readonly orders_by_id: Maybe<Orders>;
   readonly orders_by_version: Maybe<Version_Orders>;
+  readonly promocodes: ReadonlyArray<Promocodes>;
+  readonly promocodes_aggregated: ReadonlyArray<Promocodes_Aggregated>;
+  readonly promocodes_by_id: Maybe<Promocodes>;
+  readonly promocodes_by_version: Maybe<Version_Promocodes>;
   readonly settings: Maybe<Settings>;
   readonly settings_by_version: Maybe<Version_Settings>;
   readonly slider: ReadonlyArray<Slider>;
@@ -266,6 +270,39 @@ export type QueryOrders_By_VersionArgs = {
 };
 
 
+export type QueryPromocodesArgs = {
+  filter: InputMaybe<Promocodes_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryPromocodes_AggregatedArgs = {
+  filter: InputMaybe<Promocodes_Filter>;
+  groupBy: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryPromocodes_By_IdArgs = {
+  id: Scalars['ID']['input'];
+  version: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryPromocodes_By_VersionArgs = {
+  id: Scalars['ID']['input'];
+  version: Scalars['String']['input'];
+};
+
+
 export type QuerySettingsArgs = {
   version: InputMaybe<Scalars['String']['input']>;
 };
@@ -318,6 +355,7 @@ export type Subscription = {
   readonly homePage_slider_mutated: Maybe<HomePage_Slider_Mutated>;
   readonly orderItem_mutated: Maybe<OrderItem_Mutated>;
   readonly orders_mutated: Maybe<Orders_Mutated>;
+  readonly promocodes_mutated: Maybe<Promocodes_Mutated>;
   readonly settings_mutated: Maybe<Settings_Mutated>;
   readonly slider_mutated: Maybe<Slider_Mutated>;
 };
@@ -359,6 +397,11 @@ export type SubscriptionOrderItem_MutatedArgs = {
 
 
 export type SubscriptionOrders_MutatedArgs = {
+  event: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionPromocodes_MutatedArgs = {
   event: InputMaybe<EventEnum>;
 };
 
@@ -905,6 +948,58 @@ export type Orders_Mutated = {
   readonly key: Scalars['ID']['output'];
 };
 
+export type Promocodes = {
+  readonly __typename?: 'promocodes';
+  readonly code: Maybe<Scalars['String']['output']>;
+  readonly discount: Maybe<Scalars['Int']['output']>;
+  readonly id: Scalars['ID']['output'];
+  readonly is_active: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type Promocodes_Aggregated = {
+  readonly __typename?: 'promocodes_aggregated';
+  readonly avg: Maybe<Promocodes_Aggregated_Fields>;
+  readonly avgDistinct: Maybe<Promocodes_Aggregated_Fields>;
+  readonly count: Maybe<Promocodes_Aggregated_Count>;
+  readonly countAll: Maybe<Scalars['Int']['output']>;
+  readonly countDistinct: Maybe<Promocodes_Aggregated_Count>;
+  readonly group: Maybe<Scalars['JSON']['output']>;
+  readonly max: Maybe<Promocodes_Aggregated_Fields>;
+  readonly min: Maybe<Promocodes_Aggregated_Fields>;
+  readonly sum: Maybe<Promocodes_Aggregated_Fields>;
+  readonly sumDistinct: Maybe<Promocodes_Aggregated_Fields>;
+};
+
+export type Promocodes_Aggregated_Count = {
+  readonly __typename?: 'promocodes_aggregated_count';
+  readonly code: Maybe<Scalars['Int']['output']>;
+  readonly discount: Maybe<Scalars['Int']['output']>;
+  readonly id: Maybe<Scalars['Int']['output']>;
+  readonly is_active: Maybe<Scalars['Int']['output']>;
+};
+
+export type Promocodes_Aggregated_Fields = {
+  readonly __typename?: 'promocodes_aggregated_fields';
+  readonly discount: Maybe<Scalars['Float']['output']>;
+  readonly id: Maybe<Scalars['Float']['output']>;
+};
+
+export type Promocodes_Filter = {
+  readonly _and: InputMaybe<ReadonlyArray<InputMaybe<Promocodes_Filter>>>;
+  readonly _or: InputMaybe<ReadonlyArray<InputMaybe<Promocodes_Filter>>>;
+  readonly code: InputMaybe<String_Filter_Operators>;
+  readonly discount: InputMaybe<Number_Filter_Operators>;
+  readonly id: InputMaybe<Number_Filter_Operators>;
+  readonly is_active: InputMaybe<Boolean_Filter_Operators>;
+};
+
+export type Promocodes_Mutated = {
+  readonly __typename?: 'promocodes_mutated';
+  readonly data: Maybe<Promocodes>;
+  readonly event: Maybe<EventEnum>;
+  readonly key: Scalars['ID']['output'];
+};
+
 export type Settings = {
   readonly __typename?: 'settings';
   readonly adress: Maybe<Scalars['String']['output']>;
@@ -1067,6 +1162,14 @@ export type Version_Orders = {
   readonly totalPrice: Maybe<Scalars['Int']['output']>;
 };
 
+export type Version_Promocodes = {
+  readonly __typename?: 'version_promocodes';
+  readonly code: Maybe<Scalars['String']['output']>;
+  readonly discount: Maybe<Scalars['Int']['output']>;
+  readonly id: Scalars['ID']['output'];
+  readonly is_active: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type Version_Settings = {
   readonly __typename?: 'version_settings';
   readonly adress: Maybe<Scalars['String']['output']>;
@@ -1122,6 +1225,11 @@ export type GetHomePageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetHomePageQuery = { readonly __typename?: 'Query', readonly homePage: { readonly __typename?: 'homePage', readonly id: string, readonly title: string, readonly about: string, readonly slider: ReadonlyArray<{ readonly __typename?: 'homePage_slider', readonly id: string, readonly slider_id: { readonly __typename?: 'slider', readonly id: string, readonly title: string, readonly desc: string, readonly img: { readonly __typename?: 'directus_files', readonly id: string, readonly width: number, readonly height: number, readonly title: string } } }> } };
+
+export type GetPromocodesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPromocodesQuery = { readonly __typename?: 'Query', readonly promocodes: ReadonlyArray<{ readonly __typename?: 'promocodes', readonly id: string, readonly code: string, readonly discount: number, readonly is_active: boolean }> };
 
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1201,6 +1309,16 @@ export const GetHomePageDocument = gql`
   }
 }
     `;
+export const GetPromocodesDocument = gql`
+    query GetPromocodes {
+  promocodes {
+    id
+    code
+    discount
+    is_active
+  }
+}
+    `;
 export const GetSettingsDocument = gql`
     query GetSettings {
   settings {
@@ -1234,6 +1352,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetHomePage(variables?: GetHomePageQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetHomePageQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetHomePageQuery>(GetHomePageDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetHomePage', 'query', variables);
+    },
+    GetPromocodes(variables?: GetPromocodesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetPromocodesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetPromocodesQuery>(GetPromocodesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPromocodes', 'query', variables);
     },
     GetSettings(variables?: GetSettingsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetSettingsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetSettingsQuery>(GetSettingsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetSettings', 'query', variables);

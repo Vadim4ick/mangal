@@ -2,8 +2,17 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "../ui/input";
 import { useBasketStore } from "@/store/basket";
 import { formatPrice } from "@/shared/lib/utils";
+import { ChangeEvent } from "react";
 
-const TotalAmountForm = () => {
+const TotalAmountForm = ({
+  setPromocode,
+  promocode = "",
+  success,
+}: {
+  setPromocode: (e: ChangeEvent<HTMLInputElement>) => void;
+  promocode: string;
+  success: boolean;
+}) => {
   const { totalPrice, basket, isDelivery } = useBasketStore();
 
   return (
@@ -69,7 +78,10 @@ const TotalAmountForm = () => {
 
         <div className="flex flex-col gap-2">
           <Input
+            onChange={(e) => setPromocode(e)}
+            value={promocode || ""}
             name="promocode"
+            disabled={success}
             type="text"
             placeholder="Промокод (необязательно)*"
             className="text-center text-[14px] font-medium placeholder:text-[#9B9B9B]"

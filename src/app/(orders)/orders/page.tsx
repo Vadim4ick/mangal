@@ -16,9 +16,10 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useBasketStore } from "@/store/basket";
 import { makePaymentFx, processOrder } from "@/shared/services/createPayment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { checkPaymentFx } from "@/shared/lib/create-payment";
 import { toast } from "sonner";
+import { useGetPromocodes } from "@/shared/hooks/useGetPromocodes";
 
 const contactFormSchema = z.object({
   email: string().email({
@@ -62,11 +63,48 @@ export interface OrderFormValues {
 const OrdersPage = () => {
   const { totalPrice, isDelivery, setDelivery, basket, removeAllFromBasket } =
     useBasketStore();
+  const [promocode, setPromocode] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const { promocodes } = useGetPromocodes();
+
+  const changePromo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPromocode(e.target.value);
+  };
+
+  const handleApplyPromocode = async () => {
+    let price = totalPrice;
+
+    if (!promocodes?.length || !promocode.trim().length) return { price };
+
+    const validPromocode = promocodes
+      .filter((promo) => Boolean(promo.is_active))
+      .find((promo) => promo.code === promocode);
+
+    if (validPromocode) {
+      // applyPromocode(validPromocode.code, validPromocode.discount);
+
+      price = Math.floor(
+        totalPrice - (totalPrice * validPromocode.discount) / 100,
+      );
+
+      toast.success(
+        `Промокод ${validPromocode.code} со скидкой ${validPromocode.discount}% успешно применен!`,
+      );
+      setSuccess(true);
+    } else {
+      toast.error("Неверный промокод!");
+    }
+
+    return { price };
+  };
 
   const handleSubmit = async (
     values: OrderFormValues,
     { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
   ) => {
+    const { price } = await handleApplyPromocode();
+
     const orderResult = await processOrder({
       address: values.address,
       comment: values.comment,
@@ -75,12 +113,12 @@ const OrdersPage = () => {
       basket: basket,
       name: values.name,
       phone: values.phone,
-      totalPrice,
+      totalPrice: price,
     });
     if (orderResult.success && orderResult.orderId) {
       await makePaymentFx({
         description: "Заказ номер: " + orderResult.orderId,
-        amount: totalPrice,
+        amount: price,
         metadata: {
           orderId: orderResult.orderId,
         },
@@ -97,6 +135,9 @@ const OrdersPage = () => {
   }, []);
 
   const clearCartByPayment = async () => {
+    if (!localStorage.getItem("paymentId")) {
+      return;
+    }
     const paymentId = JSON.parse(localStorage.getItem("paymentId") as string);
 
     if (!paymentId) {
@@ -231,7 +272,11 @@ const OrdersPage = () => {
                         </Tabs>
                       </div>
 
-                      <TotalAmountForm />
+                      <TotalAmountForm
+                        promocode={promocode}
+                        success={success}
+                        setPromocode={changePromo}
+                      />
                     </div>
                   </Form>
                 );

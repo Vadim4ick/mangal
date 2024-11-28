@@ -19,7 +19,6 @@ interface State {
   basket: BasketItem[];
   totalCount: number;
   totalPrice: number;
-
   addToBasket: (basketItem: BasketItem) => void;
   increaseCount: (basketItem: BasketItem) => void;
   decreaseCount: (basketItem: BasketItem) => void;
