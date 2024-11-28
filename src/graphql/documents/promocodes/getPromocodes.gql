@@ -1,0 +1,8 @@
+query GetPromocodes {
+  promocodes {
+    id
+    code
+    discount
+    is_active
+  }
+}

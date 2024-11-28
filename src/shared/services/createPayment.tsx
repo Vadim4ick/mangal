@@ -104,3 +104,12 @@ export const fetchSettings = async () => {
     console.error("Ошибка запроса:", error);
   }
 };
+
+export const fetchPromocodes = async () => {
+  try {
+    const data = await gql.GetPromocodes();
+    return data.promocodes;
+  } catch (error) {
+    console.error("Ошибка запроса:", error);
+  }
+};

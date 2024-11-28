@@ -33,7 +33,7 @@ export default async function Home() {
 
                 <div className="flex flex-col gap-[8px] text-center tablet:min-w-[339px]">
                   <p className="text-[16px] font-[700] leading-[22px] text-[#363636]">
-                    Доставка по городу - 300 руб.
+                    Доставка по городу - 200 руб.
                   </p>
                   <p className="text-[16px] font-[700] leading-[22px] text-[#363636]">
                     При заказе от 2000 руб. -{" "}
