@@ -1,0 +1,21 @@
+query GetHomePage {
+  homePage {
+    id
+    title
+    about
+    slider {
+      id
+      slider_id {
+        id
+        img {
+          id
+          width
+          height
+          title
+        }
+        title
+        desc
+      }
+    }
+  }
+}

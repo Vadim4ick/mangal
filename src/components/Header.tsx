@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
+import { useGetSettings } from "@/shared/hooks/useGetSettings";
 import { Grill } from "@/shared/icons/Grill";
 import { HeaderLogo } from "@/shared/icons/HeaderLogo";
 import { Location } from "@/shared/icons/Location";
 import { Phone } from "@/shared/icons/Phone";
 import { Time } from "@/shared/icons/Time";
-import { cn } from "@/shared/lib/utils";
+import { cn, formatPhoneNumber } from "@/shared/lib/utils";
 import { Container } from "@/shared/ui/container";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useBasketStore } from "@/store/basket";
@@ -21,6 +22,8 @@ const Header = ({ bottomLinks = true }: { bottomLinks?: boolean }) => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const navbarRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const { fixed, setFixed, navbar, isLoading } = useHeaderStore();
+
+  const { settings } = useGetSettings();
 
   const router = useRouter();
 
@@ -103,6 +106,8 @@ const Header = ({ bottomLinks = true }: { bottomLinks?: boolean }) => {
     }
   }, [activeId]);
 
+  // const { homePage } = await gql.GetHomePage();
+
   return (
     <>
       {bottomLinks && (
@@ -115,30 +120,36 @@ const Header = ({ bottomLinks = true }: { bottomLinks?: boolean }) => {
               <div className="flex items-center gap-2">
                 <Time />
 
-                <p className="text-[14px] font-[700] leading-[19px] text-white">
-                  Работаем с 08:00 до 22:00
-                </p>
+                {settings?.adress && (
+                  <p className="text-[14px] font-[700] leading-[19px] text-white">
+                    {settings.adress}
+                  </p>
+                )}
               </div>
               <div className="flex gap-[43px]">
-                <div className="flex items-center gap-[8px]">
-                  <Location />
-
-                  <p className="text-[14px] font-[700] leading-[19px] text-white">
-                    ул. Карякина, 7, Краснодар
-                  </p>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="flex cursor-pointer items-center gap-[6px]"
-                  >
-                    <Phone />
+                {settings?.adress && (
+                  <div className="flex items-center gap-[8px]">
+                    <Location />
 
                     <p className="text-[14px] font-[700] leading-[19px] text-white">
-                      + 7 (900) 555-83-83
+                      {settings.adress}
                     </p>
-                  </a>
-                </div>
+                  </div>
+                )}
+                {settings?.phone && (
+                  <div>
+                    <a
+                      href="#"
+                      className="flex cursor-pointer items-center gap-[6px]"
+                    >
+                      <Phone />
+
+                      <p className="text-[14px] font-[700] leading-[19px] text-white">
+                        {formatPhoneNumber(settings.phone)}
+                      </p>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </Container>

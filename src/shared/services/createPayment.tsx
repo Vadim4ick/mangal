@@ -87,3 +87,12 @@ export const processOrder = async (props: Props) => {
     return { success: false };
   }
 };
+
+export const fetchSettings = async () => {
+  try {
+    const data = await gql.GetSettings();
+    return data.settings;
+  } catch (error) {
+    console.error("Ошибка запроса:", error);
+  }
+};

@@ -1,0 +1,12 @@
+query GetSettings {
+  settings {
+    id
+    adress
+    time
+    ip
+    bik
+    ogrnip
+    inn
+    phone
+  }
+}

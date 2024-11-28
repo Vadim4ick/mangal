@@ -33,6 +33,7 @@ const CatalogItem = ({ item }: { item: Item }) => {
               item.itemSizes[0].buttonImageCroppedUrl?.["475x250-webp"]
                 .url as string
             }
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="img"
             fill
             className="h-full w-full rounded-t-[12px] object-cover"
