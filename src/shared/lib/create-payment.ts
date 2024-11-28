@@ -25,20 +25,39 @@ export async function createPayment(details: PaymentDetails) {
     },
     data: {
       amount: {
-        value: details.amount,
+        value: "165.00",
         currency: "RUB",
       },
       confirmation: {
         type: "redirect",
-        return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
+        return_url: "https://example.com/success",
       },
       payment_method_data: {
         type: "bank_card",
       },
       capture: true,
-      description: details.description,
+      description: "Оплата заказа №80",
       metadata: {
-        ...details.metadata,
+        orderId: "80",
+      },
+      receipt: {
+        customer: {
+          email: "customer@example.com",
+          phone: "+79000000000",
+        },
+        items: [
+          {
+            description: "Шашлык",
+            quantity: "1.00",
+            amount: {
+              value: "165.00",
+              currency: "RUB",
+            },
+            vat_code: 1,
+            payment_mode: "full_payment",
+            payment_subject: "commodity",
+          },
+        ],
       },
     },
   });
