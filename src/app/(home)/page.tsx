@@ -8,6 +8,8 @@ import { Container } from "@/shared/ui/container";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 
+export const revalidate = 60;
+
 export default async function Home() {
   const { homePage } = await gql.GetHomePage();
 
