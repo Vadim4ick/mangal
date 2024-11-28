@@ -32,8 +32,8 @@ export async function createPayment(details: PaymentDetails) {
         "Idempotence-Key": Date.now(),
       },
       auth: {
-        username: "494138",
-        password: "live_hURecpFvzomO9C2toZl3l43_cu8bGpTq1aueB4KAZrA",
+        username: process.env.YOOKASSA_STORE_ID as string,
+        password: process.env.YOOKASSA_API_KEY as string,
       },
       data: {
         amount: {
@@ -42,20 +42,19 @@ export async function createPayment(details: PaymentDetails) {
         },
         confirmation: {
           type: "redirect",
-          return_url: "https://kingofmangal.ru",
+          return_url: process.env.NEXT_PUBLIC_FRONT_URL as string,
         },
         payment_method_data: {
           type: "bank_card",
         },
         capture: true,
-        description: "test",
+        description: details.description,
         metadata: {
-          orderId: "42424",
+          ...details.metadata,
         },
         receipt: {
           customer: {
-            email: "customer@example.com",
-            phone: "+79000000000",
+            ...details.customer,
           },
           items: [
             {
