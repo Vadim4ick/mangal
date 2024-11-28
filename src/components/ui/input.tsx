@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { cn } from "@/shared/lib/utils";
 import { useField } from "formik";
-// import ReactInputMask from "react-input-mask";
+import ReactInputMask from "react-input-mask";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -48,16 +48,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onBlur: isFormik ? handleBlur : undefined,
     };
 
-    // if (telMask) {
-    //   // @ts-ignore
-    //   return (
-    //     <ReactInputMask
-    //       mask="+7(999)999-99-99"
-    //       className={combinedClassName}
-    //       {...commonProps}
-    //     />
-    //   );
-    // }
+    if (telMask) {
+      // @ts-ignore
+      return (
+        <ReactInputMask
+          mask="+7(999)999-99-99"
+          className={combinedClassName}
+          {...commonProps}
+        />
+      );
+    }
 
     return (
       <input
