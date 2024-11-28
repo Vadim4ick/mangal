@@ -13,7 +13,7 @@ export interface PaymentDetails {
   basket: BasketItem[];
 }
 
-export async function createPayment(details: PaymentDetails) {
+export async function createPayment() {
   // const test = details.basket.map((item) => ({
   //   description: item.item.name,
   //   quantity: item.count,
@@ -37,7 +37,7 @@ export async function createPayment(details: PaymentDetails) {
       },
       data: {
         amount: {
-          value: details.amount.toFixed(2),
+          value: "165.00",
           currency: "RUB",
         },
         confirmation: {
@@ -48,9 +48,9 @@ export async function createPayment(details: PaymentDetails) {
           type: "bank_card",
         },
         capture: true,
-        description: details.description,
+        description: "test",
         metadata: {
-          ...details.metadata,
+          orderId: "42424",
         },
         receipt: {
           customer: {
