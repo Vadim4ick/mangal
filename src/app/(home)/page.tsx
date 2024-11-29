@@ -1,4 +1,5 @@
 import { Banner } from "@/components/Banner";
+import { ButtonMenu } from "@/components/ButtonMenu";
 import { CatalogPage } from "@/components/CatalogPage";
 import { gql } from "@/graphql/client";
 import { DeliveryIcon } from "@/shared/icons/DeliveryIcon";
@@ -22,7 +23,10 @@ export default async function Home() {
       <CatalogPage />
 
       {/* Доставка и оплата */}
-      <section className="pt-[208px] max-tablet:pt-[108px] max-mobile:pt-[78px]">
+      <section
+        id="delivery"
+        className="pt-[208px] max-tablet:pt-[108px] max-mobile:pt-[78px]"
+      >
         <Container>
           <div className="flex flex-col gap-6 max-tablet:items-center">
             <h2 className="text-[28px] font-[700] leading-[38px] text-[#363636] max-tablet:self-start">
@@ -103,9 +107,7 @@ export default async function Home() {
                   </ReactMarkdown>
                 </div>
 
-                <button className="h-[56px] max-w-[224px] rounded-[10px] border border-[#E7A013] bg-white font-bold text-[#CF8E0B] transition-colors max-mobile:max-w-full [@media(any-hover:hover){&:hover}]:bg-[#E7A013] [@media(any-hover:hover){&:hover}]:text-[#363636]">
-                  Перейти к меню
-                </button>
+                <ButtonMenu />
               </div>
 
               <div className="relative h-[457px] w-full max-w-[489px] shrink-0 max-mobile:h-[335px]">

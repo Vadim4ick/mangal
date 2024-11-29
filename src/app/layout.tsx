@@ -13,7 +13,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Царь шампур | Краснодар",
+  title: "Царь мангал | Краснодар",
   description: "Блюда на гриле с доставкой по Краснодару",
 };
 
