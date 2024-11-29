@@ -124,12 +124,12 @@ const Footer = () => {
 
         <div className="flex items-center justify-center gap-[11px] pt-[21px] text-[12px] leading-[16px] text-[#B6B6B6] max-mobile:flex-col">
           <div className="flex items-center gap-[11px]">
-            {settings?.ip && <p>{settings.ip}</p>}
-            {settings?.bik && <p>{settings.bik}</p>}
+            {settings?.ip && <p>ИП {settings.ip} </p>}
+            {settings?.bik && <p>БИК {settings.bik}</p>}
           </div>
           <div className="flex items-center gap-[11px]">
-            {settings?.inn && <p>{settings.inn}</p>}
-            {settings?.ogrnip && <p>{settings.ogrnip}</p>}
+            {settings?.inn && <p>ИНН {settings.inn}</p>}
+            {settings?.ogrnip && <p>ОГРНИП {settings.ogrnip}</p>}
           </div>
         </div>
       </Container>
