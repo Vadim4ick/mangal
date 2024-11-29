@@ -15,7 +15,9 @@ export default async function Home() {
 
   return (
     <main className="bg-[#FAFAFA]">
-      {homePage.slider && <Banner slider={homePage.slider} />}
+      {homePage.slider && (
+        <Banner slider={homePage.slider} title={homePage.title} />
+      )}
 
       <CatalogPage />
 

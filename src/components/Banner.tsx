@@ -20,8 +20,10 @@ import { GetHomePageQuery } from "@/graphql/__generated__";
 
 const Banner = ({
   slider,
+  title,
 }: {
   slider: GetHomePageQuery["homePage"]["slider"];
+  title: string | null;
 }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -55,9 +57,11 @@ const Banner = ({
       <Container>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col justify-between gap-[58px] max-mobile:gap-[30px]">
-            <h2 className="mx-auto text-center text-[36px] font-bold leading-[49px] text-[#363636] max-mobileSmall:max-w-[305px]">
-              Блюда на гриле с доставкой по Краснодару
-            </h2>
+            {title && (
+              <h2 className="mx-auto text-center text-[36px] font-bold leading-[49px] text-[#363636] max-mobileSmall:max-w-[305px]">
+                {title}
+              </h2>
+            )}
 
             <Carousel
               plugins={[
