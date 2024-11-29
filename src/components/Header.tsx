@@ -237,20 +237,35 @@ const Header = ({ bottomLinks = true }: { bottomLinks?: boolean }) => {
                       />
                     ))}
 
-                  <Link
-                    href="/orders"
+                  <button
+                    onClick={() => {
+                      const catalogElement =
+                        document.getElementById("delivery");
+                      if (catalogElement) {
+                        catalogElement.scrollIntoView({
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
                     className="cursor-pointer whitespace-nowrap py-[9px] pl-[115px] text-[16px] font-[700] leading-[22px] text-white mobile:hidden"
                   >
                     Доставка и оплата
-                  </Link>
+                  </button>
                 </div>
 
-                <Link
-                  href="/orders"
+                <button
+                  onClick={() => {
+                    const catalogElement = document.getElementById("delivery");
+                    if (catalogElement) {
+                      catalogElement.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
                   className="cursor-pointer py-[9px] text-[16px] font-[700] leading-[22px] text-white max-mobile:hidden"
                 >
                   Доставка и оплата
-                </Link>
+                </button>
               </div>
             </Container>
           </div>
