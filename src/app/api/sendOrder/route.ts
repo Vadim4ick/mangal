@@ -43,7 +43,6 @@ export async function POST(request: Request) {
     const message = `
     📦 *Новый заказ*:
     - *Имя*: ${orderItem.orders_by_id.name}
-    - *Email*: ${orderItem.orders_by_id.email}
     - *Телефон*: ${orderItem.orders_by_id.phone}
     - *Способ доставки*: ${orderItem.orders_by_id.isDelivery ? "Доставка" : "Самовывоз"}
     ${orderItem.orders_by_id.isDelivery && orderItem.orders_by_id.address ? `- *Адрес*: ${orderItem.orders_by_id.address}` : ""}

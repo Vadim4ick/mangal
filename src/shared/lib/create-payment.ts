@@ -7,7 +7,6 @@ export interface PaymentDetails {
   amount: number;
   metadata: any;
   customer: {
-    email: string;
     phone: string;
   };
   basket: BasketItem[];
@@ -85,7 +84,6 @@ export async function createPayment(details: PaymentDetails) {
 
         receipt: {
           customer: {
-            email: details.customer.email,
             phone: formatPhoneNumber(details.customer.phone),
           },
           items: items,

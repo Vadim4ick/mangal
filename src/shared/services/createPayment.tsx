@@ -11,7 +11,6 @@ export interface PaymentDetails {
     orderId: string | number;
   };
   customer: {
-    email: string;
     phone: string;
   };
   basket: BasketItem[];
@@ -21,7 +20,6 @@ interface Props {
   totalPrice: number;
   isDelivery: boolean;
   basket: BasketItem[];
-  email: string;
   name: string;
   phone: string;
   address: string;
@@ -58,16 +56,8 @@ export const makePaymentFx = async ({
 };
 
 export const processOrder = async (props: Props) => {
-  const {
-    address,
-    comment,
-    email,
-    isDelivery,
-    name,
-    basket,
-    phone,
-    totalPrice,
-  } = props;
+  const { address, comment, isDelivery, name, basket, phone, totalPrice } =
+    props;
 
   try {
     // // Создание заказа
@@ -76,7 +66,6 @@ export const processOrder = async (props: Props) => {
       totalPrice: totalPrice,
       address,
       comment,
-      email,
       name,
       phone,
     });

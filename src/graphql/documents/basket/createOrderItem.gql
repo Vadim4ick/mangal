@@ -1,7 +1,6 @@
 mutation CreateOrderItem(
   $totalPrice: Int
   $isDelivery: Boolean
-  $email: String
   $name: String
   $phone: String
   $address: String
@@ -11,7 +10,6 @@ mutation CreateOrderItem(
     data: {
       totalPrice: $totalPrice
       isDelivery: $isDelivery
-      email: $email
       name: $name
       phone: $phone
       address: $address
@@ -21,7 +19,6 @@ mutation CreateOrderItem(
     id
     totalPrice
     isDelivery
-    email
 
     name
     phone

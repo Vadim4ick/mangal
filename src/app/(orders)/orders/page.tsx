@@ -22,18 +22,16 @@ import { toast } from "sonner";
 import { useGetPromocodes } from "@/shared/hooks/useGetPromocodes";
 
 const contactFormSchema = z.object({
-  email: string().email({
-    message: "Please enter a valid email",
-  }),
   name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters" })
     .max(50, { message: "Name must be at most 50 characters" }),
-  phone: z.string(),
-  // .length(16, { message: "Phone number must be exactly 16 characters long" })
-  // .regex(/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/, {
-  //   message: "Phone number must be in the format +7(999)999-99-99",
-  // }),
+  phone: z
+    .string()
+    .length(16, { message: "Phone number must be exactly 16 characters long" })
+    .regex(/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/, {
+      message: "Phone number must be in the format +7(999)999-99-99",
+    }),
 });
 
 // Динамическое добавление полей для адреса доставки
@@ -53,7 +51,6 @@ const createSchemaWithDelivery = (isDelivery: boolean) => {
 };
 
 export interface OrderFormValues {
-  email: string;
   name: string;
   phone: string;
   address: string;
@@ -108,7 +105,6 @@ const OrdersPage = () => {
     const orderResult = await processOrder({
       address: values.address,
       comment: values.comment,
-      email: values.email,
       isDelivery,
       basket: basket,
       name: values.name,
@@ -123,7 +119,6 @@ const OrdersPage = () => {
           orderId: orderResult.orderId,
         },
         customer: {
-          email: values.email,
           phone: values.phone,
         },
         basket: basket,
@@ -168,7 +163,6 @@ const OrdersPage = () => {
 
             <Formik<TypeOf<ReturnType<typeof createSchemaWithDelivery>>>
               initialValues={{
-                email: "",
                 name: "",
                 phone: "",
                 address: "",

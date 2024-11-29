@@ -42,7 +42,7 @@ export default async function Home() {
                     Доставка по городу - 200 руб.
                   </p>
                   <p className="text-[16px] font-[700] leading-[22px] text-[#363636]">
-                    При заказе от 2000 руб. -{" "}
+                    При заказе от 1000 руб. -{" "}
                     <span className="uppercase text-[#FFAF10]">БЕСПЛАТНО</span>
                   </p>
                 </div>
@@ -58,7 +58,7 @@ export default async function Home() {
                     Доставялем
                   </p>
                   <p className="text-[16px] font-[700] leading-[24px] text-[#363636]">
-                    ежедневно с 10:00 до 22:00
+                    ежедневно с 10:00 до 23:00
                   </p>
                 </div>
               </article>
