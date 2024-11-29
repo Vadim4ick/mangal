@@ -23,7 +23,7 @@ const TotalAmountForm = ({
         </span>
         <span className="text-[18px] font-[700] leading-[25px] text-[#363636]">
           {formatPrice(
-            isDelivery && totalPrice < 2000 && basket.length
+            isDelivery && totalPrice < 1000 && basket.length
               ? totalPrice + 200
               : totalPrice,
           )}{" "}
@@ -43,7 +43,7 @@ const TotalAmountForm = ({
           </div>
           <div className="flex items-center justify-between">
             {isDelivery ? (
-              totalPrice < 2000 && basket.length ? (
+              totalPrice < 1000 && basket.length ? (
                 <>
                   <span className="text-[14px] font-[700] leading-[19px] text-[#363636]">
                     Доставка:

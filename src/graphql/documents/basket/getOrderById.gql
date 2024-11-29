@@ -3,7 +3,6 @@ query GetOrderById($id: ID!) {
     id
     totalPrice
     isDelivery
-    email
     name
     phone
     basket {

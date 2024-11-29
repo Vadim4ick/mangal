@@ -8,36 +8,23 @@ const PersonalData = () => {
         Персональные данные:
       </h2>
 
-      <div className="flex flex-col gap-[20px] tablet:max-w-[723px]">
-        <div className="flex flex-col gap-[4px]">
+      <div className="flex w-full items-center justify-center gap-[20px] max-mobile:flex-col">
+        <div className="flex w-full flex-col gap-[4px]">
           <Label htmlFor="name">Ваше имя</Label>
 
           <Input isFormik={true} name="name" id="name" />
         </div>
 
-        <div className="grid grid-cols-2 gap-[40px] max-tablet:gap-[20px] max-mobile:grid-cols-1">
-          <div className="flex flex-col gap-[4px]">
-            <Label htmlFor="phone">Телефон</Label>
+        <div className="flex w-full flex-col gap-[4px]">
+          <Label htmlFor="phone">Телефон</Label>
 
-            <Input
-              isFormik={true}
-              name="phone"
-              telMask={true}
-              id="phone"
-              className="max-w-[723px]"
-            />
-          </div>
-
-          <div className="flex flex-col gap-[4px]">
-            <Label htmlFor="email">E-mail</Label>
-
-            <Input
-              id="email"
-              isFormik={true}
-              name="email"
-              className="max-w-[723px]"
-            />
-          </div>
+          <Input
+            isFormik={true}
+            name="phone"
+            telMask={true}
+            id="phone"
+            className="max-w-[723px]"
+          />
         </div>
       </div>
     </div>

@@ -459,7 +459,6 @@ export type Create_Orders_Input = {
   readonly address: InputMaybe<Scalars['String']['input']>;
   readonly basket: InputMaybe<ReadonlyArray<InputMaybe<Create_OrderItem_Input>>>;
   readonly comment: InputMaybe<Scalars['String']['input']>;
-  readonly email: InputMaybe<Scalars['String']['input']>;
   readonly id: InputMaybe<Scalars['ID']['input']>;
   readonly isDelivery: InputMaybe<Scalars['Boolean']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
@@ -875,7 +874,6 @@ export type Orders = {
   readonly basket: Maybe<ReadonlyArray<Maybe<OrderItem>>>;
   readonly basket_func: Maybe<Count_Functions>;
   readonly comment: Maybe<Scalars['String']['output']>;
-  readonly email: Maybe<Scalars['String']['output']>;
   readonly id: Scalars['ID']['output'];
   readonly isDelivery: Maybe<Scalars['Boolean']['output']>;
   readonly name: Maybe<Scalars['String']['output']>;
@@ -912,7 +910,6 @@ export type Orders_Aggregated_Count = {
   readonly address: Maybe<Scalars['Int']['output']>;
   readonly basket: Maybe<Scalars['Int']['output']>;
   readonly comment: Maybe<Scalars['Int']['output']>;
-  readonly email: Maybe<Scalars['Int']['output']>;
   readonly id: Maybe<Scalars['Int']['output']>;
   readonly isDelivery: Maybe<Scalars['Int']['output']>;
   readonly name: Maybe<Scalars['Int']['output']>;
@@ -933,7 +930,6 @@ export type Orders_Filter = {
   readonly basket: InputMaybe<OrderItem_Filter>;
   readonly basket_func: InputMaybe<Count_Function_Filter_Operators>;
   readonly comment: InputMaybe<String_Filter_Operators>;
-  readonly email: InputMaybe<String_Filter_Operators>;
   readonly id: InputMaybe<Number_Filter_Operators>;
   readonly isDelivery: InputMaybe<Boolean_Filter_Operators>;
   readonly name: InputMaybe<String_Filter_Operators>;
@@ -1115,7 +1111,6 @@ export type Update_Orders_Input = {
   readonly address: InputMaybe<Scalars['String']['input']>;
   readonly basket: InputMaybe<ReadonlyArray<InputMaybe<Update_OrderItem_Input>>>;
   readonly comment: InputMaybe<Scalars['String']['input']>;
-  readonly email: InputMaybe<Scalars['String']['input']>;
   readonly id: InputMaybe<Scalars['ID']['input']>;
   readonly isDelivery: InputMaybe<Scalars['Boolean']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
@@ -1154,7 +1149,6 @@ export type Version_Orders = {
   readonly address: Maybe<Scalars['String']['output']>;
   readonly basket: Maybe<Scalars['JSON']['output']>;
   readonly comment: Maybe<Scalars['String']['output']>;
-  readonly email: Maybe<Scalars['String']['output']>;
   readonly id: Maybe<Scalars['ID']['output']>;
   readonly isDelivery: Maybe<Scalars['Boolean']['output']>;
   readonly name: Maybe<Scalars['String']['output']>;
@@ -1193,7 +1187,6 @@ export type Version_Slider = {
 export type CreateOrderItemMutationVariables = Exact<{
   totalPrice: InputMaybe<Scalars['Int']['input']>;
   isDelivery: InputMaybe<Scalars['Boolean']['input']>;
-  email: InputMaybe<Scalars['String']['input']>;
   name: InputMaybe<Scalars['String']['input']>;
   phone: InputMaybe<Scalars['String']['input']>;
   address: InputMaybe<Scalars['String']['input']>;
@@ -1201,7 +1194,7 @@ export type CreateOrderItemMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrderItemMutation = { readonly __typename?: 'Mutation', readonly create_orders_item: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string } };
+export type CreateOrderItemMutation = { readonly __typename?: 'Mutation', readonly create_orders_item: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string } };
 
 export type CreateOrderItemItemMutationVariables = Exact<{
   count: InputMaybe<Scalars['Int']['input']>;
@@ -1219,7 +1212,7 @@ export type GetOrderByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders_by_id: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly email: string, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string, readonly basket: ReadonlyArray<{ readonly __typename?: 'orderItem', readonly count: number, readonly name: string, readonly totalPrice: number, readonly modificators: string }> } };
+export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders_by_id: { readonly __typename?: 'orders', readonly id: string, readonly totalPrice: number, readonly isDelivery: boolean, readonly name: string, readonly phone: string, readonly address: string, readonly comment: string, readonly basket: ReadonlyArray<{ readonly __typename?: 'orderItem', readonly count: number, readonly name: string, readonly totalPrice: number, readonly modificators: string }> } };
 
 export type GetHomePageQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1238,14 +1231,13 @@ export type GetSettingsQuery = { readonly __typename?: 'Query', readonly setting
 
 
 export const CreateOrderItemDocument = gql`
-    mutation CreateOrderItem($totalPrice: Int, $isDelivery: Boolean, $email: String, $name: String, $phone: String, $address: String, $comment: String) {
+    mutation CreateOrderItem($totalPrice: Int, $isDelivery: Boolean, $name: String, $phone: String, $address: String, $comment: String) {
   create_orders_item(
-    data: {totalPrice: $totalPrice, isDelivery: $isDelivery, email: $email, name: $name, phone: $phone, address: $address, comment: $comment}
+    data: {totalPrice: $totalPrice, isDelivery: $isDelivery, name: $name, phone: $phone, address: $address, comment: $comment}
   ) {
     id
     totalPrice
     isDelivery
-    email
     name
     phone
     address
@@ -1272,7 +1264,6 @@ export const GetOrderByIdDocument = gql`
     id
     totalPrice
     isDelivery
-    email
     name
     phone
     basket {
