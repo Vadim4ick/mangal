@@ -98,7 +98,7 @@ const OrdersPage = () => {
     if (orderResult.success && orderResult.orderId) {
       await makePaymentFx({
         description: "Заказ номер: " + orderResult.orderId,
-        amount: totalPrice,
+        amount: updatedTotalPrice,
         metadata: {
           orderId: orderResult.orderId,
         },
