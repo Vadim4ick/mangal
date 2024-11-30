@@ -36,7 +36,7 @@ const CatalogItem = ({ item }: { item: Item }) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="img"
             fill
-            className="h-full w-full rounded-t-[12px] object-cover"
+            className="h-full w-full rounded-[12px] object-cover"
           />
 
           {/* {item.sale && (
