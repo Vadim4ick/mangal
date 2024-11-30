@@ -84,13 +84,14 @@ const OrdersPage = () => {
   ) => {
     await handleApplyPromocode();
 
-    const updatedTotalPrice = useBasketStore.getState().totalPrice;
+    const updatedTotalPrice = await useBasketStore.getState().totalPrice;
+    const updatedBasket = await useBasketStore.getState().basket;
 
     const orderResult = await processOrder({
       address: values.address,
       comment: values.comment,
       isDelivery,
-      basket: basket,
+      basket: updatedBasket,
       name: values.name,
       phone: values.phone,
       totalPrice: updatedTotalPrice,
@@ -105,7 +106,7 @@ const OrdersPage = () => {
         customer: {
           phone: values.phone,
         },
-        basket: basket,
+        basket: updatedBasket,
       });
     }
   };
