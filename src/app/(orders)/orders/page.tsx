@@ -75,15 +75,16 @@ const OrdersPage = () => {
     setPromocode(e.target.value);
   };
 
-  const handleApplyPromocode = () => {
+  const handleApplyPromocode = async () =>
     applyPromocode(promocode, promocodes);
-  };
 
   const handleSubmit = async (
     values: OrderFormValues,
     { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
   ) => {
     await handleApplyPromocode();
+
+    const updatedTotalPrice = useBasketStore.getState().totalPrice;
 
     const orderResult = await processOrder({
       address: values.address,
@@ -92,7 +93,7 @@ const OrdersPage = () => {
       basket: basket,
       name: values.name,
       phone: values.phone,
-      totalPrice: totalPrice,
+      totalPrice: updatedTotalPrice,
     });
     if (orderResult.success && orderResult.orderId) {
       await makePaymentFx({
