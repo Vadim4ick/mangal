@@ -1020,11 +1020,22 @@ export type Slider = {
   readonly desc: Maybe<Scalars['String']['output']>;
   readonly id: Scalars['ID']['output'];
   readonly img: Maybe<Directus_Files>;
+  readonly imgMobile: Maybe<Directus_Files>;
   readonly title: Maybe<Scalars['String']['output']>;
 };
 
 
 export type SliderImgArgs = {
+  filter: InputMaybe<Directus_Files_Filter>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  page: InputMaybe<Scalars['Int']['input']>;
+  search: InputMaybe<Scalars['String']['input']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type SliderImgMobileArgs = {
   filter: InputMaybe<Directus_Files_Filter>;
   limit: InputMaybe<Scalars['Int']['input']>;
   offset: InputMaybe<Scalars['Int']['input']>;
@@ -1052,6 +1063,7 @@ export type Slider_Aggregated_Count = {
   readonly desc: Maybe<Scalars['Int']['output']>;
   readonly id: Maybe<Scalars['Int']['output']>;
   readonly img: Maybe<Scalars['Int']['output']>;
+  readonly imgMobile: Maybe<Scalars['Int']['output']>;
   readonly title: Maybe<Scalars['Int']['output']>;
 };
 
@@ -1066,6 +1078,7 @@ export type Slider_Filter = {
   readonly desc: InputMaybe<String_Filter_Operators>;
   readonly id: InputMaybe<Number_Filter_Operators>;
   readonly img: InputMaybe<Directus_Files_Filter>;
+  readonly imgMobile: InputMaybe<Directus_Files_Filter>;
   readonly title: InputMaybe<String_Filter_Operators>;
 };
 
@@ -1181,6 +1194,7 @@ export type Version_Slider = {
   readonly desc: Maybe<Scalars['String']['output']>;
   readonly id: Scalars['ID']['output'];
   readonly img: Maybe<Scalars['JSON']['output']>;
+  readonly imgMobile: Maybe<Scalars['JSON']['output']>;
   readonly title: Maybe<Scalars['String']['output']>;
 };
 
@@ -1217,7 +1231,7 @@ export type GetOrderByIdQuery = { readonly __typename?: 'Query', readonly orders
 export type GetHomePageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetHomePageQuery = { readonly __typename?: 'Query', readonly homePage: { readonly __typename?: 'homePage', readonly id: string, readonly title: string, readonly about: string, readonly slider: ReadonlyArray<{ readonly __typename?: 'homePage_slider', readonly id: string, readonly slider_id: { readonly __typename?: 'slider', readonly id: string, readonly title: string, readonly desc: string, readonly img: { readonly __typename?: 'directus_files', readonly id: string, readonly width: number, readonly height: number, readonly title: string } } }> } };
+export type GetHomePageQuery = { readonly __typename?: 'Query', readonly homePage: { readonly __typename?: 'homePage', readonly id: string, readonly title: string, readonly about: string, readonly slider: ReadonlyArray<{ readonly __typename?: 'homePage_slider', readonly id: string, readonly slider_id: { readonly __typename?: 'slider', readonly id: string, readonly title: string, readonly desc: string, readonly img: { readonly __typename?: 'directus_files', readonly id: string, readonly width: number, readonly height: number, readonly title: string }, readonly imgMobile: { readonly __typename?: 'directus_files', readonly id: string, readonly width: number, readonly height: number, readonly title: string } } }> } };
 
 export type GetPromocodesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1288,6 +1302,12 @@ export const GetHomePageDocument = gql`
       slider_id {
         id
         img {
+          id
+          width
+          height
+          title
+        }
+        imgMobile {
           id
           width
           height

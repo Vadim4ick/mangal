@@ -81,8 +81,18 @@ const Banner = ({
                       <Image
                         src={pathImage(slide.slider_id.img.id)}
                         fill
-                        alt="banners"
-                        className="rounded-[12px] object-cover"
+                        alt="banner"
+                        className="rounded-[12px] object-cover max-mobile:hidden"
+                      />
+                      <Image
+                        src={
+                          slide.slider_id.imgMobile?.id
+                            ? pathImage(slide.slider_id.imgMobile.id)
+                            : pathImage(slide.slider_id.img.id)
+                        }
+                        fill
+                        alt="banner"
+                        className="rounded-[12px] object-cover mobile:hidden"
                       />
 
                       <div className="absolute flex h-full w-full flex-col justify-between p-[60px] max-mobile:items-center max-mobile:px-[22px] max-mobile:pb-[26px] max-mobile:pt-[30px]">
