@@ -60,6 +60,9 @@ body {
   * {
     @apply border-border;
   }
+  .skeleton {
+    @apply bg-primary/30;
+  }
   body {
     @apply bg-background text-foreground;
   }
