@@ -1,8 +1,9 @@
 "use client";
 
+import { useImagePreloader } from "@/shared/hooks/useImagePreloader";
 import { Minuse } from "@/shared/icons/Minuse";
 import { Pluse } from "@/shared/icons/Pluse";
-import { formatPrice } from "@/shared/lib/utils";
+import { cn, formatPrice } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { useBasketStore } from "@/store/basket";
 import { Item } from "@/store/catalog";
@@ -12,6 +13,7 @@ import Image from "next/image";
 const CatalogItem = ({ item }: { item: Item }) => {
   const { addToBasket, basket, increaseCount, decreaseCount } =
     useBasketStore();
+  const { handleLoadingImageComplete, imgSpinner } = useImagePreloader();
 
   const { setIsOpen, setItem } = useModalSupplements();
 
@@ -29,14 +31,14 @@ const CatalogItem = ({ item }: { item: Item }) => {
       {item.itemSizes[0].buttonImageCroppedUrl && (
         <div className="relative min-h-[182px]">
           <Image
-            src={
-              item.itemSizes[0].buttonImageCroppedUrl?.["475x250-webp"]
-                .url as string
-            }
+            src={item.itemSizes[0].buttonImageUrl as string}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="img"
+            className={cn("h-full w-full rounded-[12px] object-cover", {
+              skeleton: imgSpinner,
+            })}
+            onLoad={handleLoadingImageComplete}
             fill
-            className="h-full w-full rounded-[12px] object-cover"
           />
 
           {/* {item.sale && (
