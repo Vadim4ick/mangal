@@ -7,11 +7,9 @@ import { ChangeEvent } from "react";
 const TotalAmountForm = ({
   setPromocode,
   promocode = "",
-  success,
 }: {
   setPromocode: (e: ChangeEvent<HTMLInputElement>) => void;
   promocode: string;
-  success: boolean;
 }) => {
   const { totalPrice, basket, isDelivery } = useBasketStore();
 
@@ -81,7 +79,6 @@ const TotalAmountForm = ({
             onChange={(e) => setPromocode(e)}
             value={promocode || ""}
             name="promocode"
-            disabled={success}
             type="text"
             placeholder="Промокод (необязательно)*"
             className="text-center text-[14px] font-medium placeholder:text-[#9B9B9B]"

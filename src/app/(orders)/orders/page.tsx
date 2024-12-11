@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
@@ -11,10 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Container } from "@/shared/ui/container";
-import { TypeOf, string, z } from "zod";
-import { Form, Formik, FormikHelpers } from "formik";
+import { TypeOf, z } from "zod";
+import { Form, Formik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useBasketStore } from "@/store/basket";
+import { calculateTotalPrice, useBasketStore } from "@/store/basket";
 import { makePaymentFx, processOrder } from "@/shared/services/createPayment";
 import { useEffect, useState } from "react";
 import { checkPaymentFx } from "@/shared/lib/create-payment";
@@ -58,16 +56,9 @@ export interface OrderFormValues {
 }
 
 const OrdersPage = () => {
-  const {
-    totalPrice,
-    isDelivery,
-    setDelivery,
-    basket,
-    removeAllFromBasket,
-    applyPromocode,
-  } = useBasketStore();
+  const { totalPrice, isDelivery, setDelivery, basket, removeAllFromBasket } =
+    useBasketStore();
   const [promocode, setPromocode] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const { promocodes } = useGetPromocodes();
 
@@ -75,38 +66,68 @@ const OrdersPage = () => {
     setPromocode(e.target.value);
   };
 
-  const handleApplyPromocode = async () =>
-    applyPromocode(promocode, promocodes);
+  const handleApplyPromocode = async () => {
+    if (!promocodes?.length || !promocode.trim().length) {
+      return;
+    }
 
-  const handleSubmit = async (
-    values: OrderFormValues,
-    { setSubmitting, resetForm }: FormikHelpers<OrderFormValues>,
-  ) => {
-    await handleApplyPromocode();
+    const validPromocode = promocodes
+      .filter((promo) => promo.is_active)
+      .find((promo) => promo.code === promocode);
 
-    const updatedTotalPrice = await useBasketStore.getState().totalPrice;
-    const updatedBasket = await useBasketStore.getState().basket;
+    if (!validPromocode) {
+      toast.error("Неверный промокод!");
+      return;
+    }
+
+    // Применить скидку ко всем товарам
+    const discount = validPromocode.discount;
+
+    const updatedBasket = basket.map((item) => {
+      const discountedPrice =
+        item.totalPrice - (item.totalPrice * discount) / 100;
+
+      return {
+        ...item,
+        totalPrice: Math.floor(discountedPrice), // Округление вниз
+      };
+    });
+
+    const totalPrice = calculateTotalPrice(updatedBasket);
+
+    toast.success(
+      `Промокод ${validPromocode.code} со скидкой ${discount}% успешно применен!`,
+    );
+
+    return {
+      discountPrice: totalPrice,
+      discountBasket: updatedBasket,
+    };
+  };
+
+  const handleSubmit = async (values: OrderFormValues) => {
+    const res = await handleApplyPromocode();
 
     const orderResult = await processOrder({
       address: values.address,
       comment: values.comment,
       isDelivery,
-      basket: updatedBasket,
+      basket: res?.discountBasket ?? basket,
       name: values.name,
       phone: values.phone,
-      totalPrice: updatedTotalPrice,
+      totalPrice: res?.discountPrice ?? totalPrice,
     });
     if (orderResult.success && orderResult.orderId) {
       await makePaymentFx({
         description: "Заказ номер: " + orderResult.orderId,
-        amount: updatedTotalPrice,
+        amount: res?.discountPrice ?? totalPrice,
         metadata: {
           orderId: orderResult.orderId,
         },
         customer: {
           phone: values.phone,
         },
-        basket: updatedBasket,
+        basket: res?.discountBasket ?? basket,
       });
     }
   };
@@ -159,9 +180,7 @@ const OrdersPage = () => {
                 createSchemaWithDelivery(isDelivery),
               )}
             >
-              {(FormikState) => {
-                const errors = FormikState.errors;
-
+              {() => {
                 return (
                   <Form className="card-body">
                     <div className="grid grid-cols-[1fr_360px] gap-[28px] max-desktop1250:gap-[10px] max-tablet:grid-cols-1 max-tablet:gap-4">
@@ -254,7 +273,6 @@ const OrdersPage = () => {
 
                       <TotalAmountForm
                         promocode={promocode}
-                        success={success}
                         setPromocode={changePromo}
                       />
                     </div>

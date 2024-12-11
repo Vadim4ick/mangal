@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Item } from "./catalog";
-import { toast } from "sonner";
-import { Promocodes } from "@/graphql/__generated__";
 
 export interface Modifier {
   id: string;
@@ -26,11 +24,7 @@ interface State {
   decreaseCount: (basketItem: BasketItem) => void;
   removeFromBasket: (basketItem: BasketItem) => void;
   removeAllFromBasket: () => void;
-  applyPromocode: (
-    promocode: string,
-    promocodes: readonly Promocodes[] | null | undefined,
-  ) => void;
-  appliedPromocode: string | null;
+
   isDelivery: boolean;
   setDelivery: (val: boolean) => void;
 }
@@ -38,7 +32,7 @@ interface State {
 const calculateTotalCount = (basket: BasketItem[]) =>
   basket.reduce((acc, basketItem) => acc + basketItem.count, 0);
 
-const calculateTotalPrice = (basket: BasketItem[]) =>
+export const calculateTotalPrice = (basket: BasketItem[]) =>
   basket.reduce((acc, basketItem) => acc + basketItem.totalPrice, 0);
 
 export const useBasketStore = create<State>()(
@@ -50,58 +44,6 @@ export const useBasketStore = create<State>()(
       isDelivery: true,
 
       setDelivery: (val: boolean) => set({ isDelivery: val }),
-      appliedPromocode: null,
-
-      applyPromocode: (promocode, promocodes) =>
-        set((state) => {
-          if (!promocodes?.length || !promocode.trim().length) {
-            toast.error("Введите корректный промокод!");
-            return state;
-          }
-
-          // Проверка на уже примененный промокод
-          if (state.appliedPromocode === promocode) {
-            toast.error("Этот промокод уже применен!");
-            return state;
-          }
-
-          // Найти активный и валидный промокод
-          const validPromocode = promocodes
-            .filter((promo) => promo.is_active)
-            .find((promo) => promo.code === promocode);
-
-          if (!validPromocode) {
-            toast.error("Неверный промокод!");
-            return state;
-          }
-
-          // Применить скидку ко всем товарам
-          const discount = validPromocode.discount;
-
-          const updatedBasket = state.basket.map((item) => {
-            const discountedPrice =
-              item.totalPrice - (item.totalPrice * discount) / 100;
-
-            return {
-              ...item,
-              totalPrice: Math.floor(discountedPrice), // Округление вниз
-            };
-          });
-
-          // Пересчитать общую стоимость
-          const totalPrice = calculateTotalPrice(updatedBasket);
-
-          toast.success(
-            `Промокод ${validPromocode.code} со скидкой ${discount}% успешно применен!`,
-          );
-
-          return {
-            basket: updatedBasket,
-            totalPrice,
-            totalCount: calculateTotalCount(updatedBasket),
-            appliedPromocode: promocode, // Сохранение примененного промокода
-          };
-        }),
 
       addToBasket: (basketItem: BasketItem) =>
         set((state) => {
@@ -210,7 +152,6 @@ export const useBasketStore = create<State>()(
           basket: [],
           totalCount: 0,
           totalPrice: 0,
-          appliedPromocode: null,
         }),
     }),
     {
