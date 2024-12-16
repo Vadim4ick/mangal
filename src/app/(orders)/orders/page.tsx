@@ -124,6 +124,7 @@ const OrdersPage = () => {
         metadata: {
           orderId: orderResult.orderId,
         },
+        isDelivery,
         customer: {
           phone: values.phone,
         },

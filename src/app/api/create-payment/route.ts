@@ -11,6 +11,7 @@ export async function POST(req: Request) {
       metadata: body.metadata,
       customer: body.customer,
       basket: body.basket,
+      isDelivery: body.isDelivery,
     });
 
     return NextResponse.json({ result: paymentData });

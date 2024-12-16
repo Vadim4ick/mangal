@@ -9,6 +9,7 @@ export interface PaymentDetails {
   customer: {
     phone: string;
   };
+  isDelivery: boolean;
   basket: BasketItem[];
 }
 
@@ -49,6 +50,21 @@ export async function createPayment(details: PaymentDetails) {
     payment_subject: "commodity",
   }));
 
+  if (details.isDelivery) {
+    // Добавляем пункт "Доставка" в чек
+    items.push({
+      description: "Доставка",
+      quantity: 1,
+      amount: {
+        value: 200, // Убедитесь, что значение имеет два десятичных знака
+        currency: "RUB",
+      },
+      vat_code: 1, // Укажите соответствующий код НДС для доставки
+      payment_mode: "full_payment",
+      payment_subject: "service", // Тип предмета для доставки обычно "service"
+    });
+  }
+
   console.log(items);
   console.log(details);
 
@@ -66,7 +82,7 @@ export async function createPayment(details: PaymentDetails) {
       },
       data: {
         amount: {
-          value: details.amount,
+          value: details.isDelivery ? details.amount + 200 : details.amount,
           currency: "RUB",
         },
         confirmation: {

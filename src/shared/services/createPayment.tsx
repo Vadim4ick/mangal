@@ -14,6 +14,7 @@ export interface PaymentDetails {
     phone: string;
   };
   basket: BasketItem[];
+  isDelivery: boolean;
 }
 
 interface Props {
@@ -31,6 +32,7 @@ export const makePaymentFx = async ({
   amount,
   description,
   metadata,
+  isDelivery,
   customer,
   basket,
 }: PaymentDetails) => {
@@ -41,6 +43,7 @@ export const makePaymentFx = async ({
       metadata: {
         orderId: metadata.orderId,
       },
+      isDelivery,
       customer: {
         ...customer,
       },
