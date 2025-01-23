@@ -28,7 +28,7 @@ const CatalogItem = ({ item }: { item: Item }) => {
 
   return (
     <article className="flex h-[360px] flex-col gap-[10px] max-mobile:h-[332px]">
-      {item.itemSizes[0].buttonImageCroppedUrl && (
+      {item.itemSizes[0].buttonImageUrl && (
         <div className="relative min-h-[182px]">
           <Image
             src={item.itemSizes[0].buttonImageUrl as string}
