@@ -96,6 +96,7 @@ const BasketItem = ({
       totalPrice: el.totalPrice,
     });
   };
+
   return (
     <article className="flex justify-between gap-[21px] max-mobile:flex-col max-mobile:gap-[13px]">
       <div
@@ -108,10 +109,7 @@ const BasketItem = ({
           <div className="relative h-[79px] w-full max-w-[121px] rounded max-mobile:max-w-[112px]">
             <Image
               className="h-full w-full rounded-[6px] object-cover"
-              src={
-                el.item.itemSizes[0].buttonImageCroppedUrl?.["475x250-webp"]
-                  .url as string
-              }
+              src={el.item.itemSizes[0].buttonImageUrl as string}
               fill
               alt=""
             />

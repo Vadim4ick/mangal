@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { useBasketStore } from "@/store/basket";
 import { formatPrice } from "@/shared/lib/utils";
 import { ChangeEvent } from "react";
+import { useFormikContext } from "formik";
 
 const TotalAmountForm = ({
   setPromocode,
@@ -11,6 +12,8 @@ const TotalAmountForm = ({
   setPromocode: (e: ChangeEvent<HTMLInputElement>) => void;
   promocode: string;
 }) => {
+  const { errors, dirty } = useFormikContext();
+
   const { totalPrice, basket, isDelivery } = useBasketStore();
 
   return (
@@ -84,7 +87,13 @@ const TotalAmountForm = ({
             className="text-center text-[14px] font-medium placeholder:text-[#9B9B9B]"
           />
 
-          <Button disabled={!basket.length} type="submit" className="h-[56px]">
+          <Button
+            disabled={
+              !basket.length || Object.keys(errors).length > 0 || !dirty
+            }
+            type="submit"
+            className="h-[56px]"
+          >
             Перейти к оплате
           </Button>
 
