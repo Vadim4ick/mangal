@@ -50,7 +50,7 @@ export async function createPayment(details: PaymentDetails) {
     payment_subject: "commodity",
   }));
 
-  if (details.isDelivery) {
+  if (details.isDelivery && details.amount < 1000) {
     // Добавляем пункт "Доставка" в чек
     items.push({
       description: "Доставка",
@@ -64,9 +64,6 @@ export async function createPayment(details: PaymentDetails) {
       payment_subject: "service", // Тип предмета для доставки обычно "service"
     });
   }
-
-  console.log(items);
-  console.log(details);
 
   try {
     const { data } = await axios({
@@ -82,7 +79,10 @@ export async function createPayment(details: PaymentDetails) {
       },
       data: {
         amount: {
-          value: details.isDelivery ? details.amount + 200 : details.amount,
+          value:
+            details.isDelivery && details.amount < 1000
+              ? details.amount + 200
+              : details.amount,
           currency: "RUB",
         },
         confirmation: {
